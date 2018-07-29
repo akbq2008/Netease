@@ -1,0 +1,15 @@
+1
+遮罩隐藏   loginFloor_hide  true
+
+
+点击
+遮罩显示   loginFloor_hide  false
+2
+左边   右边显示
+
+
+点击右边  
+左边收缩      右边透明度变小
+
+
+3
