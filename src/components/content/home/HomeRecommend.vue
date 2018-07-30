@@ -54,14 +54,14 @@
       </div>
       <!-- 歌单 -->
       <div class="songlist_containeer">
-        <a v-for="(item,index) in songList" :key="index" v-if="index<6" :href="'/play?id='+item.id">
+        <a v-for="(item,index) in songList" @touchstart="currentSong(item)" :key="index" v-if="index<6">
           <div class="song_detail">
             <img :src="item.picUrl" alt="">
             <div class="song_count">
               <svg aria-hidden="true">
                 <use xlink:href="#icon-headset"></use>
               </svg>
-              <span>{{item.playCount}}</span>
+              <span>{{(item.playCount/10000).toFixed(0)}}万</span>
             </div>
           </div>
           <p>{{item.name}}</p>
@@ -93,6 +93,10 @@ export default {
     };
   },
   methods: {
+    currentSong(item) {
+      this.$store.commit("currentSong", item);
+      this.$router.push("/play?id=" + item.id);
+    },
     //   banner数据初始化
     init() {
       this.$axios.get("/banner").then(data => {
@@ -107,6 +111,7 @@ export default {
         data = data.data;
         if (data.code === 200) {
           this.songList = data.result;
+          this.$store.commit("pustSongList", this.songList);
           console.log(this.songList);
         }
       });
@@ -196,6 +201,7 @@ export default {
         position: relative;
         img {
           display: inline-block;
+          border-radius: 0.31rem;
           width: 100%;
         }
         .song_count {

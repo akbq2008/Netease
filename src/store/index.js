@@ -6,12 +6,23 @@ export const store = new Vuex.Store({
   state: {
     toastisShow: false, //toast是否显示
     alertisShow: false, //alert是否显示
-    confirmisShow: false //confirm是否显示
+    confirmisShow: false, //confirm是否显示
+    songList: [], //歌单
+    currentSong: [] //当前的歌
   },
   //获取属性
   getters: {},
   //改变属性
-  mutations: {},
+  mutations: {
+    //歌单数据初始化
+    pustSongList(state, payload) {
+      state.songList = payload;
+    },
+    //当前的歌
+    currentSong(state, payload) {
+      state.currentSong.push(payload);
+    }
+  },
   //出发mutations
   actions: {}
 });
