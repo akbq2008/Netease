@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     currentSong(item) {
-      this.$store.commit("currentSong", item);
+      // this.$store.commit("currentSong", this.songList);
       this.$router.push("/play?id=" + item.id);
     },
     //   banner数据初始化
@@ -112,7 +112,6 @@ export default {
         if (data.code === 200) {
           this.songList = data.result;
           this.$store.commit("pustSongList", this.songList);
-          console.log(this.songList);
         }
       });
     },

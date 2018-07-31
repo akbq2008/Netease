@@ -8,7 +8,7 @@ export const store = new Vuex.Store({
     alertisShow: false, //alert是否显示
     confirmisShow: false, //confirm是否显示
     songList: [], //歌单
-    currentSong: [] //当前的歌
+    currentSong: [] //全部
   },
   //获取属性
   getters: {},
@@ -20,6 +20,7 @@ export const store = new Vuex.Store({
     },
     //当前的歌
     currentSong(state, payload) {
+      state.currentSong = [];
       state.currentSong.push(payload);
     }
   },

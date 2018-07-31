@@ -202,6 +202,7 @@ export default {
   methods: {
     //显示
     showLogin() {
+      console.log(this.loginisShow, this.isLeft);
       this.loginisShow = !this.loginisShow;
       this.isLeft = false;
     },

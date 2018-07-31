@@ -2,13 +2,13 @@
   <div class="play_container">
     <!-- 歌单头部 -->
     <div class="play_header origin_bg">
-      <svg class="icon" aria-hidden="true" @touchstart="$router.go(-1)">
+      <svg class="icon" aria-hidden="true" @click.stop="$router.go(-1)">
         <use xlink:href="#icon-fanhui"></use>
       </svg>
-      <a href="#">
+      <div>
         <p>歌单</p>
-        <p>推荐</p>
-      </a>
+        <p v-if="currentSong[0]">{{currentSong[0].copywriter}}</p>
+      </div>
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#icon-sousuo"></use>
       </svg>
@@ -21,16 +21,16 @@
       <!--  -->
       <div class="play_content_header">
         <div class="img_wrap song_detail">
-          <img :src="$store.state.currentSong.picUrl" alt="">
+          <img v-if="currentSong[0]" :src="currentSong[0].picUrl" alt="">
           <div class="song_count">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-headset"></use>
             </svg>
-            <span>500wan</span>
+            <span v-if="currentSong[0]">{{currentSong[0].playcount}}</span>
           </div>
         </div>
         <div class="right_content">
-          <p>失落少年失落少年失落少年失落少年</p>
+          <p v-if="currentSong[0]">{{currentSong[0].name}}</p>
           <div>
             <img src="http://p1.music.126.net/AQqnFZkw6iLHgD5Ez-xhjw==/18693896697673323.jpg" alt="" class="logo">
             <span>空气</span>
@@ -121,14 +121,30 @@
 <script>
 import Footer from "../footer/Footer";
 export default {
-  computed: {
-    currentSong() {
-      console.log(this.$store.state.currentSong);
-      return this.$store.state.songList;
+  data() {
+    return {
+      currentSong: []
+    };
+  },
+  methods: {
+    //数据初始化
+    getSongList() {
+      this.$axios.get("/personalized").then(data => {
+        data = data.data;
+        if (data.code === 200) {
+          let songList = data.result;
+          let back = songList.filter(item => {
+            return item.id == this.$route.query.id;
+          });
+          this.currentSong = back;
+        }
+      });
     }
   },
   mounted() {
-    console.log(this.$store.state.currentSong);
+    this.getSongList();
+    // console.log(this.currentSong);
+    // console.log(this.$route);
   },
   components: {
     "app-footer": Footer
@@ -151,11 +167,17 @@ export default {
       width: 1.5rem;
       height: 1.5rem;
     }
-    a {
+    div {
       flex: 3;
       color: #fff;
       p:first-of-type {
         font-size: 1rem;
+      }
+      p:last-of-type {
+        text-overflow: ellipsis;
+        max-width: 11.75rem;
+        white-space: nowrap;
+        overflow: hidden;
       }
     }
   }
