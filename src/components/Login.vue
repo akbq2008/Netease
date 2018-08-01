@@ -4,12 +4,12 @@
             <use xlink:href="#icon-logo"></use>
         </svg>
         <p>
-            <button class="login_btn origin_bd origin_cr" @touchstart="$router.push('/phoneLogin')">手机号登录</button>
+            <button class="login_btn origin_bd origin_cr" @touchstart.stop="$router.push('/phoneLogin')">手机号登录</button>
         </p>
         <p>
             <button class="login_btn origin_bd origin_cr">注册</button>
         </p>
-        <button class="login_btn origin_bd origin_cr" @touchstart="$router.go(-1)">返回</button>
+        <button class="login_btn origin_bd origin_cr" @touchstart.stop="$router.go(-1)">返回</button>
         <!-- 有默认事件 -->
 
         <p class="svg_wrap">其他登录方式</p>

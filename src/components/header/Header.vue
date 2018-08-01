@@ -28,11 +28,23 @@
     <!--登录框 -->
     <div class="loginFloor_container" :class="{'loginFloor_hide':!loginisShow,'loginFloor_show':loginisShow}">
       <div class="loginFloor">
-        <div class="loginFloor_top">
+        <div class="loginFloor_top" v-if="loginMes.length===0">
           <div>
             <p>登录网易云音乐</p>
             <p>320K高音质无限下载，手机电脑多端同步</p>
-            <mu-button color="primary" :round=true @touchstart="$router.push('/login')">立即登录</mu-button>
+            <mu-button color="primary" :round=true @touchstart.stop="$router.push('/login')">立即登录</mu-button>
+          </div>
+        </div>
+        <div v-else v-for="item in loginMes" :key="item.id">
+          <div class="loginFloor_sub_container" :key="item.id" :style="{backgroundImage:'url('+item.profile.backgroundUrl+');'}">
+            <img :src="item.profile.avatarUrl" alt="">
+            <div class="loginFloor_content_wrap">
+              <div>
+                <span>{{item.profile.nickname}}</span>
+                <a href="#"><img src="" alt=""></a>
+              </div>
+              <img src="" alt="">
+            </div>
           </div>
         </div>
         <div class="loginFloor_content">
@@ -192,6 +204,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -199,6 +212,7 @@ export default {
       isLeft: false //左滑动画
     };
   },
+  computed: mapState(["loginMes"]),
   methods: {
     //显示
     showLogin() {
@@ -214,6 +228,9 @@ export default {
       }
       this.loginisShow = !this.loginisShow;
     }
+  },
+  mounted() {
+    console.log(this.loginMes);
   }
 };
 </script>
@@ -299,6 +316,22 @@ export default {
         button {
           width: 1rem !important;
           margin-top: 0.63rem;
+        }
+      }
+      .loginFloor_sub_container {
+        background-size: 100% 100%;
+        padding: 0.63rem;
+        img {
+          display: inline-block;
+          width: 4rem;
+          height: 4rem;
+          border-radius: 2rem;
+        }
+        .loginFloor_content_wrap {
+          justify-content: space-between;
+        }
+        span {
+          color: #fff;
         }
       }
     }

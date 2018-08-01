@@ -8,12 +8,17 @@ export const store = new Vuex.Store({
     alertisShow: false, //alert是否显示
     confirmisShow: false, //confirm是否显示
     songList: [], //歌单
-    currentSong: [] //全部
+    currentSong: [], //全部
+    loginMes: [] //登录后的用户信息
   },
   //获取属性
   getters: {},
   //改变属性
   mutations: {
+    //
+    islogin(state, payload) {
+      state.loginMes.push(payload);
+    },
     //歌单数据初始化
     pustSongList(state, payload) {
       state.songList = payload;
