@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="header origin_bd">
     <div class="header_menu origin_bg">
       <!-- 菜单 -->
       <mu-icon value="menu" color="#fff" right @click="showLogin"></mu-icon>
@@ -27,151 +27,154 @@
     </div>
     <!--登录框 -->
     <div class="loginFloor_container" :class="{'loginFloor_hide':!loginisShow,'loginFloor_show':loginisShow}">
-      <div class="loginFloor">
-        <div class="loginFloor_top" v-if="loginMes.length===0">
-          <div>
-            <p>登录网易云音乐</p>
-            <p>320K高音质无限下载，手机电脑多端同步</p>
-            <mu-button color="primary" :round=true @touchstart.stop="$router.push('/login')">立即登录</mu-button>
-          </div>
-        </div>
-        <div v-else v-for="item in loginMes" :key="item.id">
-          <div class="loginFloor_sub_container" :key="item.id" :style="{backgroundImage:'url('+item.profile.backgroundUrl+');'}">
-            <img :src="item.profile.avatarUrl" alt="">
-            <div class="loginFloor_content_wrap">
-              <div>
-                <span>{{item.profile.nickname}}</span>
-                <a href="#"><img src="" alt=""></a>
-              </div>
-              <img src="" alt="">
+      <!-- 登录页面信息 -->
+      <div class="scrollWrap" ref="loginFloor">
+        <div class="loginFloor">
+          <div class="loginFloor_top" v-if="userInfo.length===0">
+            <div>
+              <p>登录网易云音乐</p>
+              <p>320K高音质无限下载，手机电脑多端同步</p>
+              <mu-button color="primary" :round=true @touchstart.stop="$router.push('/login')">立即登录</mu-button>
             </div>
           </div>
-        </div>
-        <div class="loginFloor_content">
-          <ul>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-message"></use>
-                </svg>
-                <span>我的消息</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-huiyuanzhongxin"></use>
-                </svg>
-                <span>会员中心</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-shangcheng"></use>
-                </svg>
-                <span>商城</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-huodong"></use>
-                </svg>
-                <span>游戏推荐Beta</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-liuliangchongzhi"></use>
-                </svg>
-                <span>在线听歌免流量</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <mu-divider></mu-divider>
-        <div class="loginFloor_content">
-          <ul>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-haoyou"></use>
-                </svg>
-                <span>我的好友</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-fujin"></use>
-                </svg>
-                <span>附近的人</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <mu-divider></mu-divider>
-        <div class="loginFloor_content">
-          <ul>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-clothes-copy"></use>
-                </svg>
-                <span>个性换肤</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-tinggeshiqu"></use>
-                </svg>
-                <span>听歌识曲</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-shizhong"></use>
-                </svg>
-                <span>定时停止播放</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-richscan_icon"></use>
-                </svg>
-                <span>扫一扫</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-naozhong1-copy"></use>
-                </svg>
-                <span>音乐闹钟</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-zhinengjiashi"></use>
-                </svg>
-                <span>驾驶模式</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-youhuiquan"></use>
-                </svg>
-                <span>优惠券</span>
-              </a>
-            </li>
-          </ul>
+          <div v-else v-for="item in userInfo" :key="item.id">
+            <div class="loginFloor_sub_container" :key="item.id" v-if="item.profile" :style="{backgroundImage: 'url(' + item.profile.backgroundUrl + ')'}">
+              <img :src="item.profile.avatarUrl" alt="">
+              <div class="loginFloor_content_wrap">
+                <div>
+                  <span>{{item.profile.nickname}} {{item.bindings[0].refreshTime|timeTo(1)}}</span>
+                  <a href="#"><img src="" alt=""></a>
+                </div>
+                <img src="" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="loginFloor_content">
+            <ul>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-message"></use>
+                  </svg>
+                  <span>我的消息</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-huiyuanzhongxin"></use>
+                  </svg>
+                  <span>会员中心</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-shangcheng"></use>
+                  </svg>
+                  <span>商城</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-huodong"></use>
+                  </svg>
+                  <span>游戏推荐Beta</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-liuliangchongzhi"></use>
+                  </svg>
+                  <span>在线听歌免流量</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <mu-divider></mu-divider>
+          <div class="loginFloor_content">
+            <ul>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-haoyou"></use>
+                  </svg>
+                  <span>我的好友</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-fujin"></use>
+                  </svg>
+                  <span>附近的人</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <mu-divider></mu-divider>
+          <div class="loginFloor_content">
+            <ul>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-clothes-copy"></use>
+                  </svg>
+                  <span>个性换肤</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-tinggeshiqu"></use>
+                  </svg>
+                  <span>听歌识曲</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-shizhong"></use>
+                  </svg>
+                  <span>定时停止播放</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-richscan_icon"></use>
+                  </svg>
+                  <span>扫一扫</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-naozhong1-copy"></use>
+                  </svg>
+                  <span>音乐闹钟</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-zhinengjiashi"></use>
+                  </svg>
+                  <span>驾驶模式</span>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-youhuiquan"></use>
+                  </svg>
+                  <span>优惠券</span>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="loginFloor_content_footer">
           <ul>
@@ -191,11 +194,12 @@
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#icon-tuichu"></use>
               </svg>
-              <span>退出</span>
+              <span @touchstart="exit">退出</span>
             </li>
           </ul>
         </div>
       </div>
+      <!-- 登录页面信息 -->
       <!-- 透明度变小 -->
       <div class="loginFloor_flex" @click="hideLogin" :class="{'loginFlex_hide':!loginisShow}">
       </div>
@@ -204,6 +208,7 @@
 </template>
 
 <script>
+import Bscroll from "better-scroll";
 import { mapState } from "vuex";
 export default {
   data() {
@@ -212,11 +217,17 @@ export default {
       isLeft: false //左滑动画
     };
   },
-  computed: mapState(["loginMes"]),
+  computed: mapState(["userInfo"]),
   methods: {
+    // 退出
+    exit() {
+      localStorage.setItem("isLogin", false);
+      this.$store.commit("clearUserInfo", []);
+      this.$router.push("/login");
+    },
     //显示
     showLogin() {
-      console.log(this.loginisShow, this.isLeft);
+      // console.log(this.loginisShow, this.isLeft);
       this.loginisShow = !this.loginisShow;
       this.isLeft = false;
     },
@@ -229,15 +240,35 @@ export default {
       this.loginisShow = !this.loginisShow;
     }
   },
+  watch: {
+    loginisShow() {
+      if (this.loginisShow) {
+        this.$nextTick(() => {
+          this.scroll = new Bscroll(this.$refs.loginFloor);
+          console.log(this.scroll);
+        });
+      }
+    }
+  },
+  created() {},
   mounted() {
-    console.log(this.loginMes);
+    console.log(this.userInfo);
+    console.log(this);
   }
 };
 </script>
 
 <style scoped lang="scss">
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
   .header_menu {
+    height: 4vh;
+    line-height: 4vh;
+    overflow: hidden;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -284,20 +315,38 @@ export default {
   .loginFloor_container {
     position: absolute;
     display: flex;
-    z-index: 98;
+    z-index: 110;
     left: 0;
     right: 0;
     top: 0;
     height: 100vh;
     .loginFloor {
-      position: absolute;
-      top: 0;
       width: 80vw;
-      height: 100%;
-      overflow: hidden;
       background: white;
-      z-index: 99;
       opacity: 1;
+      // height: 100%;
+      padding-bottom: 2.5rem;
+      .loginFloor_content {
+        padding: 0.63rem 0.94rem;
+      }
+      li {
+        padding: 0.62rem;
+        a {
+          display: block;
+        }
+      }
+      svg {
+        display: inline-block;
+        width: 1.4rem;
+        height: 1.4rem;
+        vertical-align: middle;
+      }
+      span {
+        color: #646565;
+        vertical-align: middle;
+        margin-left: 0.63rem;
+        font-size: 0.88rem;
+      }
       .loginFloor_top {
         height: 20vh;
         background-image: url("../../assets/img/top_banner.jpg");
@@ -339,16 +388,26 @@ export default {
       flex: 1;
       opacity: 0.7;
       background: #646565;
+      height: 100vh;
     }
   }
-  .loginFloor_container {
-    .loginFloor_content {
-      padding: 0.63rem 0.94rem;
-    }
-    li {
-      padding: 0.62rem;
-      a {
-        display: block;
+
+  .loginFloor_content_footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 20vw;
+    z-index: 120;
+    line-height: 2.5rem;
+    background: white;
+    border-top: 1px solid #656565;
+    ul {
+      height: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      li {
+        height: 100%;
       }
     }
     svg {
@@ -362,22 +421,6 @@ export default {
       vertical-align: middle;
       margin-left: 0.63rem;
       font-size: 0.88rem;
-    }
-    .loginFloor_content_footer {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      z-index: 10;
-      height: 2.5rem;
-      border-top: 1px solid #656565;
-      ul {
-        height: 100%;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-      }
     }
   }
 }

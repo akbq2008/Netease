@@ -127,6 +127,13 @@ export default {
     };
   },
   methods: {
+    // 获取歌曲
+    getSong() {
+      this.$axios.post("/recommend/songs").then(data => {
+        data = data.data.data;
+        console.log(data);
+      });
+    },
     //数据初始化
     getSongList() {
       this.$axios.get("/personalized").then(data => {
@@ -143,6 +150,7 @@ export default {
   },
   mounted() {
     this.getSongList();
+    this.getSong();
     // console.log(this.currentSong);
     // console.log(this.$route);
   },

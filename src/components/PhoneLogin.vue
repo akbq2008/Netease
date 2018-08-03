@@ -42,15 +42,15 @@ export default {
       if (!this.form.pwd) {
         this.Toast("密码不能为空！");
       }
-      // if (this.form.phoneNum.length < 11) {
-      //   this.Toast("请输入11位的手机号码！");
-      //   return;
-      // }
+      if (this.form.phoneNum.length < 11) {
+        this.Toast("请输入11位的手机号码！");
+        return;
+      }
       const loading = this.$loading({
         // ...options
       });
-      this.form.phoneNum = "17681863293";
-      this.form.pwd = "a123456";
+      // this.form.phoneNum = "17681863293";
+      // this.form.pwd = "a123456";
       this.$axios
         .post(
           "/login/cellphone?phone=" +
@@ -66,7 +66,9 @@ export default {
           }
           if (data.code === 200) {
             loading.close();
-            _this.$store.commit("islogin", data);
+            _this.$store.commit("putloginInfo", data);
+            localStorage.setItem("isLogin", true);
+            // console.log(localStorage.getItem("userInfo"));
             _this.$router.push("/home/recommend/recommendContent");
           }
         });

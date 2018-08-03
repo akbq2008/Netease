@@ -17,8 +17,8 @@ export default {};
   bottom: 0;
   left: 0;
   right: 0;
-  height: 3.75rem;
-  z-index: 999;
+  height: 2.75rem;
+  z-index: 100;
   background: lightcoral;
 }
 </style>
