@@ -9,12 +9,18 @@ export const store = new Vuex.Store({
     confirmisShow: false, //confirm是否显示
     songList: [], //歌单
     currentSong: [], //全部
-    userInfo: [] //登录后的用户信息
+    userInfo: [], //登录后的用户信息
+    currentPlay: [] //当前播放的
   },
   //获取属性
   getters: {},
   //改变属性
   mutations: {
+    // 获取当前播放的歌
+    putCurrentSong(state, payload) {
+      state.currentPlay = [];
+      state.currentPlay.push(payload);
+    },
     //清空用户信息
     clearUserInfo(state, payload) {
       state.userInfo = payload;

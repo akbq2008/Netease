@@ -19,7 +19,7 @@
           </a>
           <p>私人FM</p>
         </li>
-        <li>
+        <li @touchstart="$router.push('/dayRecommend')">
           <a href="#" class="origin_bg">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-calander"></use>

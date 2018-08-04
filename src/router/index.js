@@ -9,6 +9,7 @@ import Local from "@/components/content/local/Local";
 import HomeRecommend from "@/components/content/home/HomeRecommend";
 import Friend from "@/components/content/home/Friend";
 import AnchorStation from "@/components/content/home/AnchorStation";
+import DayRecommend from "@/components/content/home/DayRecommend";
 // 首页
 // 视频
 import videoRecommend from "@/components/content/video/Recommend";
@@ -248,6 +249,12 @@ export default new Router({
       path: "/play",
       name: "play",
       component: resolve => require(["../components/common/Play.vue"], resolve)
+    },
+    {
+      path: "/dayRecommend",
+      name: "dayRecommend",
+      component: resolve =>
+        require(["../components/content/home/DayRecommend.vue"], resolve)
     }
   ]
 });
