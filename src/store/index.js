@@ -10,15 +10,22 @@ export const store = new Vuex.Store({
     songList: [], //歌单
     currentSong: [], //全部
     userInfo: [], //登录后的用户信息
-    currentPlay: [] //当前播放的
+    currentPlay: [], //当前播放的
+    currentUrl: ""
   },
   //获取属性
   getters: {},
   //改变属性
   mutations: {
+    // 获取当前播放的歌的URL
+    CurrentSongUrl(state, payload) {
+      state.currentUrl = payload;
+    },
     // 获取当前播放的歌
     putCurrentSong(state, payload) {
       state.currentPlay = [];
+      payload.isPlay = true;
+      console.log(payload);
       state.currentPlay.push(payload);
     },
     //清空用户信息

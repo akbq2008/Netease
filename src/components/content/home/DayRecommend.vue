@@ -71,7 +71,6 @@
           </svg>
         </div>
       </div>
-
       <!-- 歌单列表 -->
     </div>
     <app-footer></app-footer>
@@ -84,21 +83,42 @@ export default {
   data() {
     return {
       song: [],
-      currentItem: {}
+      currentItem: {},
+      currentSongUrl: ""
     };
   },
   watch: {
-    currentItem(oldVal, old) {
-      oldVal.isPlay = false;
-      console.log(oldVal, old);
-    }
+    // currentItem(oldVal, val) {
+    //   this.$set(oldVal, "isPlay", false);
+    //   this.$set(val, "isPlay", true);
+    // },
+    // immediate: true,
+    // deep: true
   },
   methods: {
     // 播放当前歌曲
     playCurrent(item) {
-      this.$store.commit("putCurrentSong", item);
       this.currentItem = item;
-      this.$set(item, "isPlay", true);
+      this.songPlay();
+      this.$store.commit("putCurrentSong", this.currentItem);
+      this.getSongUrl(this.currentItem);
+    },
+    songPlay() {
+      this.song.forEach(song => {
+        song.id === this.currentItem.id
+          ? this.$set(song, "isPlay", true)
+          : this.$set(song, "isPlay", false);
+      });
+    },
+    getSongUrl(song) {
+      this.$axios.get("/music/url/?id=" + song.id).then(url => {
+        console.log(url.data);
+        if (url.data.data) {
+          url = url.data.data[0].url;
+          this.currentSongUrl = url;
+        }
+        this.$store.commit("CurrentSongUrl", url);
+      });
     },
     // 获取歌曲
     getSongList() {
@@ -116,8 +136,8 @@ export default {
     this.getSongList();
   },
   mounted() {
-    // console.log(this.currentSong);
     // console.log(this.$route);
+    // this.songPlay();
   },
   components: {
     "app-footer": Footer

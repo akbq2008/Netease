@@ -31,7 +31,7 @@ Vue.filter("timeTo", function(value, s) {
   if (!value) return "-";
   let date = new Date();
   date.setTime(value * 1000);
-  let y = date.getFullYear() - 2000;
+  let y = date.getFullYear();
   let m = date.getMonth() + 1;
   m = m < 10 ? "0" + m : m;
   let d = date.getDate();
@@ -51,6 +51,7 @@ Vue.filter("timeTo", function(value, s) {
   }
   return time;
 });
+
 /* eslint-disable no-new */
 new Vue({
   el: "#app",
