@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="footer_container">
     <!-- 播放状态栏 -->
     <div class="footer" v-for="item in currentPlay" :key="item.id">
       <div class="footer_left">
@@ -42,7 +42,7 @@
           </div>
         </div>
         <div>
-          <svg class="icon" aria-hidden="true">
+          <svg class="icon" aria-hidden="true" @touchstart="slideUp">
             <use xlink:href="#icon-gengduo"></use>
           </svg>
         </div>
@@ -51,6 +51,52 @@
         <source :src="currentSongUrl"> 您的浏览器不支持 audio 元素。
       </audio>
     </div>
+    <transition name="fade">
+      <div class="more_musicList_shadow" @touchmove.prevent>
+        <div class="shadow" @touchstart="isSlideShow=false">
+        </div>
+        <div class="more_musicList">
+          <div class="wrap">
+            <div class="wrap_left">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-liebiaoxunhuan"></use>
+              </svg>
+              <span style="margin-left:5px;">列表循环</span>（
+              <span>30</span>）
+            </div>
+            <div class="wrap_right">
+              <div class="wrpa_right_left">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-shoucangjia"></use>
+                </svg>
+                <span style="margin-left:5px;">收藏全部</span>
+              </div>
+              <div class="wrpa_right_right">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-shanchu"></use>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <ul>
+            <li class="circle_list" v-for="(item,index) in song" :key="index">
+              <div class="left">
+                <svg class="isPlay" aria-hidden="true">
+                  <use xlink:href="#icon-yinliang"></use>
+                </svg>
+                <span>{{item.name}}</span>
+                <span style="color:rgb(130,130,130,.6)" v-for="art in item.artists" :key="art.id">
+                  - {{art.name}}
+                </span>
+              </div>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-guanbi"></use>
+              </svg>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -60,6 +106,7 @@ import Vue from "vue";
 export default {
   data() {
     return {
+      song: [],
       currentSong: [],
       currentSongUrl: "",
       isPlayIcon: false,
@@ -68,7 +115,8 @@ export default {
       halfDuration: 0, //总时长的一半
       currentLeftDeg: 0, //当前左边的度数
       currentRightDeg: 0, //当前右边的度数
-      isEnded: false //当前歌曲是否播放结束
+      isEnded: false, //当前歌曲是否播放结束
+      isSlideShow: false //更多内容是否显示。
     };
   },
   watch: {
@@ -77,6 +125,10 @@ export default {
     }
   },
   methods: {
+    //
+    slideUp() {
+      this.isSlideShow = true;
+    },
     // 播放歌曲
     play() {
       this.currentSongUrl = this.currentUrl;
@@ -86,7 +138,7 @@ export default {
       //切换资源时，还没加载完就直接赋值duration会返回NaN,通过检测是否可以播放来完成。
       audio.oncanplay = () => {
         this.duration = audio.duration;
-        this.duration = 5;
+        // this.duration = 5;
         this.sdeg = 360 / this.duration; //每秒需要旋转的度数。
         this.halfDuration = this.duration / 2;
         let left = document.querySelector(".left");
@@ -138,10 +190,22 @@ export default {
         left.style.transform = "rotate(" + this.currentLeftDeg + "deg)";
         right.style.transform = "rotate(" + this.currentRightDeg + "deg)";
       });
+    },
+    getSongList() {
+      let _this = this;
+      this.$axios.post("/recommend/songs").then(data => {
+        data = data.data;
+        if (data.code === 200) {
+          _this.song = data.recommend;
+          console.log(_this.song);
+        }
+      });
     }
   },
   computed: mapState(["currentPlay", "currentUrl"]),
-  created() {},
+  created() {
+    this.getSongList();
+  },
   mounted() {}
 };
 </script>
@@ -259,5 +323,94 @@ export default {
     background: #fff;
     position: absolute;
   }
+}
+.more_musicList_shadow {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.7);
+  transition: botttom 0.5s linear;
+  .shadow {
+    opacity: 0.7;
+    height: 40vh;
+  }
+}
+.more_musicList {
+  height: 60vh;
+  background: white;
+  border-top-left-radius: 0.63rem;
+  border-top-right-radius: 0.63rem;
+  .wrap {
+    display: flex;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 0.63rem;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+    .wrap_left,
+    .wrap_right {
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .wrap_left:active,
+    .wrpa_right_left:active,
+    .wrpa_right_right:active {
+      background: #eee;
+    }
+    .wrpa_right_left,
+    .wrpa_right_right {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+    .wrpa_right_left {
+      padding: 0 0.31rem;
+      border-right: 1px solid #ddd;
+    }
+    .wrpa_right_right {
+      padding: 0 0.31rem;
+    }
+  }
+  .circle_list {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.63rem;
+    border-bottom: 1px solid #ddd;
+    .left {
+      display: flex;
+      align-items: center;
+      svg {
+        margin-right: 0.31rem;
+      }
+    }
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+  .circle_list:active {
+    background: #eee;
+  }
+}
+// .hide {
+//   display: none;
+// }
+.fade-enter-active,
+.fade-leave-active {
+  transition: 3s;
+}
+.fade-enter,
+.fade-leave-to {
+  transform: translateY(100vh);
+  opacity: 0;
 }
 </style>

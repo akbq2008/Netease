@@ -11,8 +11,8 @@ module.exports = {
     assetsPublicPath: "/",
     proxyTable: {
       "/api": {
-        // target: "http://192.168.11.150:3000",
-        target: "http://192.168.1.4:3000",
+        target: "http://192.168.11.55:3000",
+        // target: "http://192.168.1.4:3000",
         // secure: false,  // 如果是https接口，需要配置这个参数
         changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
         pathRewrite: {
@@ -22,8 +22,8 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: "192.168.1.4",
-    // host: "192.168.11.150", // can be overwritten by process.env.HOST
+    // host: "192.168.1.4",
+    host: "192.168.11.55", // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

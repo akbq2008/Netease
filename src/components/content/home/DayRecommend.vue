@@ -39,7 +39,7 @@
       </div>
       <!-- 功能 -->
       <!-- 歌单列表 -->
-      <div class="songList" v-for="(item,index) in song" :key="index" @touchstart="playCurrent(item,index)">
+      <div class="songList" v-for="(item,index) in song" :key="index" @touchstart="playCurrent(item,index)" style="">
         <div class="songList_left">
           <img :src="item.album.picUrl" v-if="!item.isPlay" />
           <svg class="isPlay" aria-hidden="true" v-else>
@@ -56,7 +56,7 @@
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#icon-sq"></use>
               </svg>
-              <span v-for="art in item.artists" :key="art.id">
+              <span style="color:#ddd;" v-for="art in item.artists" :key="art.id">
                 {{art.name}}-{{item.album.name}}
               </span>
             </p>
