@@ -39,7 +39,7 @@
       </div>
       <!-- 功能 -->
       <!-- 歌单列表 -->
-      <div class="songList" v-for="(item,index) in song" :key="index" @touchstart="playCurrent(item)">
+      <div class="songList" v-for="(item,index) in song" :key="index" @touchstart="playCurrent(item,index)">
         <div class="songList_left">
           <img :src="item.album.picUrl" v-if="!item.isPlay" />
           <svg class="isPlay" aria-hidden="true" v-else>
@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     // 播放当前歌曲
-    playCurrent(item) {
+    playCurrent(item, index) {
       this.currentItem = item;
       this.songPlay();
       this.$store.commit("putCurrentSong", this.currentItem);

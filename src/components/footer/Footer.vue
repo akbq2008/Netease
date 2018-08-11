@@ -56,12 +56,19 @@
 
 <script>
 import { mapState } from "vuex";
+import Vue from "vue";
 export default {
   data() {
     return {
       currentSong: [],
       currentSongUrl: "",
-      isPlayIcon: false
+      isPlayIcon: false,
+      duration: 0, //当前播放的总时长
+      sdeg: 0, //每秒需要旋转的度数
+      halfDuration: 0, //总时长的一半
+      currentLeftDeg: 0, //当前左边的度数
+      currentRightDeg: 0, //当前右边的度数
+      isEnded: false //当前歌曲是否播放结束
     };
   },
   watch: {
@@ -76,6 +83,36 @@ export default {
       let audio = document.querySelector("audio");
       this.isPlayIcon = true;
       audio.load(); //要加载资源
+      //切换资源时，还没加载完就直接赋值duration会返回NaN,通过检测是否可以播放来完成。
+      audio.oncanplay = () => {
+        this.duration = audio.duration;
+        this.duration = 5;
+        this.sdeg = 360 / this.duration; //每秒需要旋转的度数。
+        this.halfDuration = this.duration / 2;
+        let left = document.querySelector(".left");
+        let right = document.querySelector(".right");
+        setInterval(() => {
+          if (audio.currentTime <= this.halfDuration) {
+            this.currentRightDeg = Math.floor(this.sdeg * audio.currentTime);
+            right.style.transform = "rotate(" + this.currentRightDeg + "deg)";
+            // 右边旋转
+          } else if (
+            audio.currentTime <= this.duration &&
+            audio.currentTime > this.halfDuration
+          ) {
+            this.currentLeftDeg = Math.floor(
+              this.sdeg * (audio.currentTime - this.halfDuration)
+            );
+            left.style.transform = "rotate(" + this.currentLeftDeg + "deg)";
+            // 左边旋转
+          }
+          if (audio.ended) {
+            this.$store.commit("nextSong", true);
+            console.log(audio.ended);
+          }
+          // console.log(this.currentRightDeg, this.currentLeftDeg, "or");
+        }, 1000);
+      };
       audio.play();
     },
     // 暂停歌曲
@@ -83,12 +120,24 @@ export default {
       let audio = document.querySelector("audio");
       audio.pause();
       this.isPlayIcon = false;
+      this.$nextTick(() => {
+        let left = document.querySelector(".playMusic .left");
+        let right = document.querySelector(".playMusic .right");
+        left.style.transform = "rotate(" + this.currentLeftDeg + "deg)";
+        right.style.transform = "rotate(" + this.currentRightDeg + "deg)";
+      });
     },
     // 播放歌曲
     playMusic() {
       let audio = document.querySelector("audio");
       audio.play();
       this.isPlayIcon = true;
+      this.$nextTick(() => {
+        let left = document.querySelector(".pasuMusic .left");
+        let right = document.querySelector(".pasuMusic .right");
+        left.style.transform = "rotate(" + this.currentLeftDeg + "deg)";
+        right.style.transform = "rotate(" + this.currentRightDeg + "deg)";
+      });
     }
   },
   computed: mapState(["currentPlay", "currentUrl"]),
@@ -171,16 +220,16 @@ export default {
   .pie_left,
   .left {
     clip: rect(0, 17px, auto, 0);
-    transition: transform 0.4s ease-in 1s;
-    -webkit-transition: -webkit-transform 0.4s ease-in 1s;
-    -moz-transition: -moz-transform 0.4s ease-in 1s;
+    // transition: transform 0.4s ease-in 1s;
+    // -webkit-transition: -webkit-transform 0.4s ease-in 1s;
+    // -moz-transition: -moz-transform 0.4s ease-in 1s;
   }
   .pie_right,
   .right {
     clip: rect(0, auto, auto, 17px);
-    transition: transform 1s ease-in 0s;
-    -webkit-transition: -webkit-transform 1s ease-in 0s;
-    -moz-transition: -moz-transform 1s ease-in 0s;
+    // transition: transform 1s ease-in 0s;
+    // -webkit-transition: -webkit-transform 1s ease-in 0s;
+    // -moz-transition: -moz-transform 1s ease-in 0s;
   }
 
   .pie_left,
@@ -201,12 +250,6 @@ export default {
     top: 0;
     left: 0;
   }
-  // .left {
-  //   transform: rotate(0deg);
-  // }
-  // .right {
-  //   transform: rotate(20deg);
-  // }
   .mask {
     width: 30px;
     height: 30px;
