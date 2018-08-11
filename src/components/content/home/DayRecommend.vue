@@ -41,10 +41,11 @@
       <!-- 歌单列表 -->
       <div class="songList" v-for="(item,index) in song" :key="index" @touchstart="playCurrent(item,index)" style="">
         <div class="songList_left">
-          <img :src="item.album.picUrl" v-if="!item.isPlay" />
-          <svg class="isPlay" aria-hidden="true" v-else>
+          <!-- 播放状态同步 -->
+          <svg class="isPlay" aria-hidden="true" v-if="$store.state.currentPlay[0]&&item.name==$store.state.currentPlay[0].name">
             <use xlink:href="#icon-yinliang"></use>
           </svg>
+          <img :src="item.album.picUrl" v-else />
           <div>
             <p>
               <span>{{item.name}}</span>
@@ -112,7 +113,6 @@ export default {
     },
     getSongUrl(song) {
       this.$axios.get("/music/url/?id=" + song.id).then(url => {
-        console.log(url.data);
         if (url.data.data) {
           url = url.data.data[0].url;
           this.currentSongUrl = url;
@@ -137,7 +137,7 @@ export default {
   },
   mounted() {
     // console.log(this.$route);
-    // this.songPlay();
+    this.songPlay();
   },
   components: {
     "app-footer": Footer

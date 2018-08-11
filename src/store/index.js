@@ -25,7 +25,6 @@ export const store = new Vuex.Store({
     putCurrentSong(state, payload) {
       state.currentPlay = [];
       payload.isPlay = true;
-      console.log(payload);
       state.currentPlay.push(payload);
     },
     //清空用户信息
