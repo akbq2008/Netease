@@ -11,12 +11,22 @@ export const store = new Vuex.Store({
     currentSong: [], //全部
     userInfo: [], //登录后的用户信息
     currentPlay: [], //当前播放的
-    currentUrl: ""
+    currentUrl: "",
+    currentIndex: 0
   },
   //获取属性
-  getters: {},
+  getters: {
+    // nextIndex: state => {
+    //   console.log(state.currentIndex);
+    //   return state.currentIndex + 1;
+    // }
+  },
   //改变属性
   mutations: {
+    // 当前歌的index
+    currentSongIndex(state, p) {
+      state.currentIndex = p;
+    },
     // 获取当前播放的歌的URL
     CurrentSongUrl(state, payload) {
       state.currentUrl = payload;

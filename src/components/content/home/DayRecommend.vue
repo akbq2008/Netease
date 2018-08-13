@@ -39,37 +39,39 @@
       </div>
       <!-- 功能 -->
       <!-- 歌单列表 -->
-      <div class="songList" v-for="(item,index) in song" :key="index" @touchstart="playCurrent(item,index)" style="">
-        <div class="songList_left">
-          <!-- 播放状态同步 -->
-          <svg class="isPlay" aria-hidden="true" v-if="$store.state.currentPlay[0]&&item.name==$store.state.currentPlay[0].name">
-            <use xlink:href="#icon-yinliang"></use>
-          </svg>
-          <img :src="item.album.picUrl" v-else />
-          <div>
-            <p>
-              <span>{{item.name}}</span>
-              <span v-for="ali in item.alias" :key="ali.id" v-if="item.alias">
-                ({{ali}})
-              </span>
-            </p>
-            <p>
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-sq"></use>
-              </svg>
-              <span style="color:#ddd;" v-for="art in item.artists" :key="art.id">
-                {{art.name}}-{{item.album.name}}
-              </span>
-            </p>
+      <div class="songListWrap">
+        <div class="songList" v-for="(item,index) in song" :key="index" @touchstart="playCurrent(item,index)" style="">
+          <div class="songList_left">
+            <!-- 播放状态同步 -->
+            <svg class="isPlay" aria-hidden="true" v-if="$store.state.currentPlay[0]&&item.name==$store.state.currentPlay[0].name">
+              <use xlink:href="#icon-yinliang"></use>
+            </svg>
+            <img :src="item.album.picUrl" v-else />
+            <div>
+              <p>
+                <span>{{item.name}}</span>
+                <span v-for="(ali,index) in item.alias" :key="index" v-if="item.alias">
+                  ({{ali}})
+                </span>
+              </p>
+              <p>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-sq"></use>
+                </svg>
+                <span style="color:#ddd;" v-for="(art,index) in item.artists" :key="index">
+                  {{art.name}}-{{item.album.name}}
+                </span>
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="songList_right">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-video-copy"></use>
-          </svg>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-gengduo-copy-copy"></use>
-          </svg>
+          <div class="songList_right">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-video-copy"></use>
+            </svg>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-gengduo-copy-copy"></use>
+            </svg>
+          </div>
         </div>
       </div>
       <!-- 歌单列表 -->
@@ -88,14 +90,7 @@ export default {
       currentSongUrl: ""
     };
   },
-  watch: {
-    // currentItem(oldVal, val) {
-    //   this.$set(oldVal, "isPlay", false);
-    //   this.$set(val, "isPlay", true);
-    // },
-    // immediate: true,
-    // deep: true
-  },
+  watch: {},
   methods: {
     // 播放当前歌曲
     playCurrent(item, index) {
@@ -136,7 +131,6 @@ export default {
     this.getSongList();
   },
   mounted() {
-    // console.log(this.$route);
     this.songPlay();
   },
   components: {
@@ -305,6 +299,7 @@ export default {
     display: flex;
     border-bottom: 1px solid #ddd;
     align-items: center;
+    height: 2.75rem;
     .songList_left {
       flex: 1;
       display: flex;
@@ -327,6 +322,7 @@ export default {
       span {
         width: 10vw;
         vertical-align: middle;
+        font-size: 12px;
       }
       p {
         text-align: left;
@@ -337,12 +333,15 @@ export default {
       }
     }
     .songList_right {
-      width: 15vw;
+      min-width: 15vw;
       svg {
         width: 1.5rem;
         height: 1.5rem;
       }
     }
+  }
+  .songListWrap {
+    padding-bottom: 2.75rem;
   }
 }
 </style>

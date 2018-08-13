@@ -1,42 +1,42 @@
 <template>
   <div class="footer_container">
     <!-- 播放状态栏 -->
-    <div class="footer" v-for="item in currentPlay" :key="item.id">
+    <div class="footer" v-for="(item,index) in currentPlay" :key="index">
       <div class="footer_left">
         <img :src="item.album.picUrl" alt="">
         <div>
           <p>{{item.name}}</p>
           <p>
-            <span v-for="art in item.artists" :key="art.id">
+            <span v-for="(art,index) in item.artists" :key="index">
               {{art.name}}</span>
           </p>
         </div>
       </div>
       <div class="footer_right">
         <div v-if="!isPlayIcon" @touchstart="playMusic" class="playMusic comm ">
-          <div class="circle" style="background:red">
+          <div class="circle" style="background:red" v-cloak>
             <svg class="play_icon" aria-hidden="true">
               <use xlink:href="#icon-bofang1"></use>
             </svg>
             <div class="pie_left">
-              <div class="left"></div>
+              <div class="left" ref="playLeft"></div>
             </div>
             <div class="pie_right">
-              <div class="right"></div>
+              <div class="right" ref="playRight"></div>
             </div>
             <div class="mask"></div>
           </div>
         </div>
         <div v-else @touchstart="pauseMusic" class="pasuMusic comm">
-          <div class="circle" style="background:red">
+          <div class="circle" style="background:red" v-cloak>
             <svg aria-hidden="true" class="play_icon2">
               <use xlink:href="#icon-zanting"></use>
             </svg>
             <div class="pie_left">
-              <div class="left"></div>
+              <div class="left" ref="pasuLeft"></div>
             </div>
             <div class="pie_right">
-              <div class="right"></div>
+              <div class="right" ref="pasuRight"></div>
             </div>
             <div class="mask"></div>
           </div>
@@ -112,9 +112,6 @@
 import { mapState } from "vuex";
 import Vue from "vue";
 import Bscroll from "better-scroll";
-// const Type_circle=1;
-// const Type_range = 2;
-// const Type_single = 3;
 export default {
   data() {
     return {
@@ -138,8 +135,9 @@ export default {
     }
   },
   methods: {
-    playCurrent(item) {
+    playCurrent(item, index) {
       this.$store.commit("putCurrentSong", item);
+      this.$store.commit("currentSongIndex", index);
       this.$axios.get("/music/url/?id=" + item.id).then(url => {
         if (url.data.data) {
           url = url.data.data[0].url;
@@ -184,14 +182,76 @@ export default {
       this.isPlayIcon = true;
       audio.load(); //要加载资源
       //切换资源时，还没加载完就直接赋值duration会返回NaN,通过检测是否可以播放来完成。
+      let _this = this;
       audio.oncanplay = () => {
         this.duration = audio.duration;
-        // this.duration = 5;
+        // audio.duration = 5;
         this.sdeg = 360 / this.duration; //每秒需要旋转的度数。
         this.halfDuration = this.duration / 2;
-        let left = document.querySelector(".left");
-        let right = document.querySelector(".right");
+        this.rotateDeg();
+      };
+      audio.play();
+      audio.onended = () => {
+        // 当前歌曲播放完毕时,自动播放下一首。播放类型？循环，随机，单曲
+        if (audio.ended) {
+          let nextIndex = 0;
+          switch (this.songType) {
+            // 列表循环
+            case 1:
+              if (nextIndex > this.song.length) {
+                this.$store.commit("currentSongIndex", 0);
+              } else {
+                nextIndex = this.currentIndex + 1;
+              }
+              console.log(nextIndex);
+              break;
+            // 随机播放
+            case 2:
+              nextIndex = Math.floor(this.song.length * Math.random());
+              break;
+            // 单曲循环
+            case 3:
+              nextIndex = this.currentIndex;
+              break;
+              return nextIndex;
+          }
+          console.log(nextIndex);
+          this.playCurrent(this.song[nextIndex]);
+          this.$store.commit("currentSongIndex", nextIndex);
+        }
+      };
+    },
+    // 暂停歌曲
+    pauseMusic() {
+      let audio = document.querySelector("audio");
+      audio.pause();
+      this.isPlayIcon = false;
+      this.rotateDeg();
+    },
+    // 重新播放歌曲
+    playMusic() {
+      let audio = document.querySelector("audio");
+      audio.play();
+      this.isPlayIcon = true;
+      this.rotateDeg();
+    },
+    // 获取播放列表
+    getSongList() {
+      let _this = this;
+      this.$axios.post("/recommend/songs").then(data => {
+        data = data.data;
+        if (data.code === 200) {
+          _this.song = data.recommend;
+        }
+      });
+    },
+    // 根据播放时长旋转
+    rotateDeg() {
+      let audio = document.querySelector("audio");
+      this.$nextTick(() => {
         setInterval(() => {
+          let left = document.querySelector(".left");
+          let right = document.querySelector(".right");
           if (audio.currentTime <= this.halfDuration) {
             this.currentRightDeg = Math.floor(this.sdeg * audio.currentTime);
             right.style.transform = "rotate(" + this.currentRightDeg + "deg)";
@@ -206,51 +266,20 @@ export default {
             left.style.transform = "rotate(" + this.currentLeftDeg + "deg)";
             // 左边旋转
           }
-          // if (audio.ended) {
-          //   this.$store.commit("nextSong", true);
-          //   console.log(audio.ended);
-          // }
-          // console.log(this.currentRightDeg, this.currentLeftDeg, "or");
-        }, 1000);
-      };
-      audio.play();
-    },
-    // 暂停歌曲
-    pauseMusic() {
-      let audio = document.querySelector("audio");
-      audio.pause();
-      this.isPlayIcon = false;
-      this.$nextTick(() => {
-        let left = document.querySelector(".playMusic .left");
-        let right = document.querySelector(".playMusic .right");
-        left.style.transform = "rotate(" + this.currentLeftDeg + "deg)";
-        right.style.transform = "rotate(" + this.currentRightDeg + "deg)";
+        }, 0);
       });
-    },
-    // 播放歌曲
-    playMusic() {
-      let audio = document.querySelector("audio");
-      audio.play();
-      this.isPlayIcon = true;
-      this.$nextTick(() => {
-        let left = document.querySelector(".pasuMusic .left");
-        let right = document.querySelector(".pasuMusic .right");
-        left.style.transform = "rotate(" + this.currentLeftDeg + "deg)";
-        right.style.transform = "rotate(" + this.currentRightDeg + "deg)";
-      });
-    },
-    getSongList() {
-      let _this = this;
-      this.$axios.post("/recommend/songs").then(data => {
-        data = data.data;
-        if (data.code === 200) {
-          _this.song = data.recommend;
-          console.log(_this.song);
-        }
-      });
+      // audio.onended = () => {
+      //   // 当前歌曲播放完毕时,自动播放下一首。播放类型？循环，随机，单曲
+      //   if (audio.ended) {
+      //     let left = document.querySelector(".left");
+      //     let right = document.querySelector(".right");
+      //     right.style.transform = "rotate(0deg)";
+      //     left.style.transform = "rotate(0deg)";
+      //   }
+      // };
     }
   },
-  computed: mapState(["currentPlay", "currentUrl"]),
+  computed: mapState(["currentPlay", "currentUrl", "currentIndex"]),
   created() {
     this.getSongList();
   },
@@ -322,7 +351,7 @@ export default {
     }
   }
   .audio {
-    display: none;
+    // display: none;
   }
   .circle {
     width: 34px;

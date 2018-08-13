@@ -16,9 +16,9 @@ export default {
       if (this.$store.state) {
         let refreshTime = this.$store.state.userInfo[0].bindings[0].refreshTime;
         let expiresIn = this.$store.state.userInfo[0].bindings[0].expiresIn;
-        console.log(this);
+        // console.log(this);
         let myFilter = Vue.filter("timeTo");
-        console.log(myFilter(refreshTime, 1), myFilter(expiresIn, 1));
+        // console.log(myFilter(refreshTime, 1), myFilter(expiresIn, 1));
       }
     }
   },
