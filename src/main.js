@@ -6,11 +6,14 @@ import router from "./router";
 import axios from "axios";
 import VueAwesomeSwiper from "vue-awesome-swiper";
 import "swiper/dist/css/swiper.css";
-import { store } from "./store";
+import {
+  store
+} from "./store";
 
 Vue.use(VueAwesomeSwiper);
 Vue.config.productionTip = false;
 Vue.prototype.$axios = axios;
+// axios.defaults.baseURL = "http://www.suanliutudousi.com:3000";
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.withCredentials = true;
 var time = "";
@@ -27,7 +30,7 @@ Vue.prototype.Toast = item => {
     }, 2000);
   }, 2000);
 };
-Vue.filter("timeTo", function(value, s) {
+Vue.filter("timeTo", function (value, s) {
   if (!value) return "-";
   let date = new Date();
   date.setTime(value * 1000);
@@ -43,15 +46,34 @@ Vue.filter("timeTo", function(value, s) {
   minute = minute < 10 ? "0" + minute : minute;
   second = second < 10 ? "0" + second : second;
   let time = "";
-  s === 1
-    ? (time = y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second)
-    : (time = y + "-" + m + "-" + d);
+  s === 1 ?
+    (time = y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second) :
+    (time = y + "-" + m + "-" + d);
   if (y < 0) {
     time = "无";
   }
   return time;
 });
+Vue.directive('scrollNo', {
+  inserted: () => {
+    var locked = false;
+    window.addEventListener(
+      "touchmove",
+      function (ev) {
+        locked ||
+          ((locked = true),
+            window.addEventListener("touchend", stopTouchendPropagation, true));
+      },
+      true
+    );
 
+    function stopTouchendPropagation(ev) {
+      ev.stopPropagation();
+      window.removeEventListener("touchend", stopTouchendPropagation, true);
+      locked = false;
+    }
+  }
+})
 /* eslint-disable no-new */
 new Vue({
   el: "#app",

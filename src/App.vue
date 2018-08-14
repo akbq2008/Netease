@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
+    <app-footer></app-footer>
     <app-message></app-message>
   </div>
 </template>
@@ -8,19 +11,20 @@
 <script>
 //公共部分
 import Message from "./components/common/Message";
+import Footer from "./components/footer/Footer";
 import Vue from "vue";
 export default {
   name: "App",
   methods: {
-    refreshToken() {
-      if (this.$store.state) {
-        let refreshTime = this.$store.state.userInfo[0].bindings[0].refreshTime;
-        let expiresIn = this.$store.state.userInfo[0].bindings[0].expiresIn;
-        // console.log(this);
-        let myFilter = Vue.filter("timeTo");
-        // console.log(myFilter(refreshTime, 1), myFilter(expiresIn, 1));
-      }
-    }
+    // refreshToken() {
+    //   if (this.$store.state) {
+    //     let refreshTime = this.$store.state.userInfo[0].bindings[0].refreshTime;
+    //     let expiresIn = this.$store.state.userInfo[0].bindings[0].expiresIn;
+    //     // console.log(this);
+    //     let myFilter = Vue.filter("timeTo");
+    //     // console.log(myFilter(refreshTime, 1), myFilter(expiresIn, 1));
+    //   }
+    // }
   },
   created() {
     // localStorage.getItem("isLogin") && !this.$store.state.userInfo
@@ -36,10 +40,11 @@ export default {
     }
   },
   mounted() {
-    this.refreshToken();
+    // this.refreshToken();
   },
   components: {
-    "app-message": Message
+    "app-message": Message,
+    "app-footer": Footer
   }
 };
 </script>

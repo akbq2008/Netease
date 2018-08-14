@@ -94,7 +94,6 @@ export default {
   },
   methods: {
     currentSong(item) {
-      // this.$store.commit("currentSong", this.songList);
       this.$router.push("/play?id=" + item.id);
     },
     //   banner数据初始化

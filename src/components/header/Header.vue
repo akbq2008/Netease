@@ -28,7 +28,7 @@
     <!--登录框 -->
     <div class="loginFloor_container" :class="{'loginFloor_hide':!loginisShow,'loginFloor_show':loginisShow}">
       <!-- 登录页面信息 -->
-      <div class="scrollWrap" ref="loginFloor">
+      <div class="scrollWrap" ref="loginFloor" v-scrollNo>
         <div class="loginFloor">
           <div class="loginFloor_top" v-if="userInfo.length===0">
             <div>
@@ -190,11 +190,11 @@
               </svg>
               <span>设置</span>
             </li>
-            <li>
+            <li @touchstart="exit">
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#icon-tuichu"></use>
               </svg>
-              <span @touchstart="exit">退出</span>
+              <span>退出</span>
             </li>
           </ul>
         </div>
@@ -252,8 +252,8 @@ export default {
   },
   created() {},
   mounted() {
-    console.log(this.userInfo);
-    console.log(this);
+    // console.log(this.userInfo);
+    // console.log(this);
   }
 };
 </script>
@@ -327,7 +327,10 @@ export default {
       // height: 100%;
       padding-bottom: 2.5rem;
       .loginFloor_content {
-        padding: 0.63rem 0.94rem;
+        padding: 0.63rem 0;
+        li:active {
+          background: #ddd;
+        }
       }
       li {
         padding: 0.62rem;
@@ -407,7 +410,10 @@ export default {
       justify-content: space-around;
       align-items: center;
       li {
-        height: 100%;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
     svg {

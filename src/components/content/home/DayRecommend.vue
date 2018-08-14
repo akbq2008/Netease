@@ -1,4 +1,4 @@
-`<template>
+<template>
   <div class="play_container">
     <!-- 歌单头部 -->
     <div class="play_header origin_bg">
@@ -22,7 +22,7 @@
       <!-- 功能 -->
       <!-- 功能 -->
       <div class="play_container_wrap">
-        <div class="play_list">
+        <div class="play_list" @touchstart="songTypeFun">
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-bofang"></use>
           </svg>
@@ -39,8 +39,8 @@
       </div>
       <!-- 功能 -->
       <!-- 歌单列表 -->
-      <div class="songListWrap">
-        <div class="songList" v-for="(item,index) in song" :key="index" @touchstart="playCurrent(item,index)" style="">
+      <div class="songListWrap" @scroll.passive="onScroll" ref="songListWrap">
+        <div class="songList" v-for="(item,index) in song" :key="index" v-scrollNo @touchend="playCurrent(item,index)">
           <div class="songList_left">
             <!-- 播放状态同步 -->
             <svg class="isPlay" aria-hidden="true" v-if="$store.state.currentPlay[0]&&item.name==$store.state.currentPlay[0].name">
@@ -82,19 +82,47 @@
 
 <script>
 import Footer from "../../footer/Footer";
+import { mapState } from "vuex";
+import Bscroll from "better-scroll";
 export default {
   data() {
     return {
       song: [],
       currentItem: {},
       currentSongUrl: ""
+      // songType: 1 //默认为循环
     };
   },
-  watch: {},
   methods: {
+    onScroll() {
+      let Bscroll = new Bscroll(this.$refs.songListWrap);
+    },
+    //歌曲播放规则，单曲，循环，随机
+    songTypeFun() {
+      let item;
+      switch (this.songType) {
+        // 列表循环
+        case 1:
+          item = this.song[0];
+          this.playCurrent(item, 0);
+          break;
+        //随机播放
+        case 2:
+          let index = Math.floor(Math.random() * this.song.length);
+          item = this.song[index];
+          this.playCurrent(item, index);
+          break;
+        // 单曲循环
+        case 3:
+          item = this.song[this.currentIndex];
+          this.playCurrent(item, this.currentIndex);
+          break;
+      }
+    },
     // 播放当前歌曲
     playCurrent(item, index) {
       this.currentItem = item;
+      this.$store.commit("currentSongIndex", index);
       this.songPlay();
       this.$store.commit("putCurrentSong", this.currentItem);
       this.getSongUrl(this.currentItem);
@@ -122,7 +150,6 @@ export default {
         data = data.data;
         if (data.code === 200) {
           _this.song = data.recommend;
-          console.log(_this.song);
         }
       });
     }
@@ -133,6 +160,7 @@ export default {
   mounted() {
     this.songPlay();
   },
+  computed: mapState(["songType", "currentIndex"]),
   components: {
     "app-footer": Footer
   }
@@ -281,6 +309,11 @@ export default {
       svg {
         margin: 0 0.63rem;
       }
+    }
+    .play_list:active,
+    .playCollection:active,
+    .play_container_wrap:active {
+      background: #ddd;
     }
     .playCollection {
       width: 40vw;

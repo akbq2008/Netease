@@ -19,10 +19,10 @@
               <use xlink:href="#icon-bofang1"></use>
             </svg>
             <div class="pie_left">
-              <div class="left" ref="playLeft"></div>
+              <div class="left" ref="left"></div>
             </div>
             <div class="pie_right">
-              <div class="right" ref="playRight"></div>
+              <div class="right" ref="right"></div>
             </div>
             <div class="mask"></div>
           </div>
@@ -33,16 +33,16 @@
               <use xlink:href="#icon-zanting"></use>
             </svg>
             <div class="pie_left">
-              <div class="left" ref="pasuLeft"></div>
+              <div class="left" ref="left"></div>
             </div>
             <div class="pie_right">
-              <div class="right" ref="pasuRight"></div>
+              <div class="right" ref="right"></div>
             </div>
             <div class="mask"></div>
           </div>
         </div>
         <div class="comm">
-          <svg class="icon" aria-hidden="true" @touchstart="slideUp">
+          <svg class="icon" aria-hidden="true" @touchstart.prevent="slideUp">
             <use xlink:href="#icon-gengduo"></use>
           </svg>
         </div>
@@ -52,7 +52,7 @@
       </audio>
     </div>
     <div class="more_musicList_shadow" ref="wrap" @touchmove.prevent>
-      <div class="shadow" @touchstart="slideUp">
+      <div class="shadow" @touchstart.prevent="slideUp">
       </div>
       <div class="more_musicList">
         <div class="wrap">
@@ -85,9 +85,9 @@
             </div>
           </div>
         </div>
-        <div class="scrollWrap" ref="scrollWrap">
+        <div class="scrollWrap" ref="scrollWrap" v-scrollNo>
           <ul>
-            <li class="circle_list" v-for="(item,index) in song" :key="index" @touchstart="playCurrent(item, index)">
+            <li class="circle_list" v-for="(item,index) in song" :key="index" @touchend="playCurrent(item, index)">
               <div class="left">
                 <svg class="isPlay" aria-hidden="true" v-if="$store.state.currentPlay[0]&&item.name==$store.state.currentPlay[0].name">
                   <use xlink:href="#icon-yinliang"></use>
@@ -149,20 +149,7 @@ export default {
     //歌曲播放规则，单曲，循环，随机
     songTypeFun() {
       this.songType < 3 ? this.songType++ : (this.songType = 1);
-      switch (this.songType) {
-        // 列表循环
-        case 1:
-          "";
-          break;
-        //随机播放
-        case 2:
-          "";
-          break;
-        // 单曲循环
-        case 3:
-          "";
-          break;
-      }
+      this.$store.commit("putsongType", this.songType);
     },
     //上下运动
     slideUp() {
@@ -198,12 +185,11 @@ export default {
           switch (this.songType) {
             // 列表循环
             case 1:
-              if (nextIndex > this.song.length) {
-                this.$store.commit("currentSongIndex", 0);
-              } else {
+              if (this.currentIndex == this.song.length - 1) {
+                nextIndex = 0;
+              } else if (this.currentIndex != this.song.length - 1) {
                 nextIndex = this.currentIndex + 1;
               }
-              console.log(nextIndex);
               break;
             // 随机播放
             case 2:
@@ -254,7 +240,9 @@ export default {
           let right = document.querySelector(".right");
           if (audio.currentTime <= this.halfDuration) {
             this.currentRightDeg = Math.floor(this.sdeg * audio.currentTime);
-            right.style.transform = "rotate(" + this.currentRightDeg + "deg)";
+            if (right) {
+              right.style.transform = "rotate(" + this.currentRightDeg + "deg)";
+            }
             // 右边旋转
           } else if (
             audio.currentTime <= this.duration &&
@@ -268,15 +256,6 @@ export default {
           }
         }, 0);
       });
-      // audio.onended = () => {
-      //   // 当前歌曲播放完毕时,自动播放下一首。播放类型？循环，随机，单曲
-      //   if (audio.ended) {
-      //     let left = document.querySelector(".left");
-      //     let right = document.querySelector(".right");
-      //     right.style.transform = "rotate(0deg)";
-      //     left.style.transform = "rotate(0deg)";
-      //   }
-      // };
     }
   },
   computed: mapState(["currentPlay", "currentUrl", "currentIndex"]),
@@ -284,6 +263,7 @@ export default {
     this.getSongList();
   },
   mounted() {
+    // console.log(this.currentUrl);
     let scroll = new Bscroll(this.$refs.scrollWrap);
   }
 };

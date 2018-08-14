@@ -125,8 +125,7 @@ Vue.use(Router);
 export default new Router({
   mode: "history",
   linkActiveClass: "active",
-  routes: [
-    {
+  routes: [{
       path: "/",
       redirect: "/home/recommend/recommendContent"
     },
@@ -141,52 +140,45 @@ export default new Router({
       path: "/home",
       component: resolve => require(["../components/Index.vue"], resolve),
       redirect: "/home/recommend/recommendContent",
-      children: [
-        {
+      children: [{
           path: "recommend",
           name: "recommend",
           component: resolve =>
             require(["../components/content/home/Index.vue"], resolve),
-          children: [
-            {
-              path: "recommendContent",
-              name: "recommendContent",
-              component: resolve =>
-                require([
-                  "../components/content/home/HomeRecommend.vue"
-                ], resolve)
-            }
-          ]
+          children: [{
+            path: "recommendContent",
+            name: "recommendContent",
+            component: resolve =>
+              require([
+                "../components/content/home/HomeRecommend.vue"
+              ], resolve)
+          }]
         },
         {
           path: "friend",
           name: "friend",
           component: resolve =>
             require(["../components/content/home/Index.vue"], resolve),
-          children: [
-            {
-              path: "friendContent",
-              name: "friendContent",
-              component: resolve =>
-                require(["../components/content/home/Friend.vue"], resolve)
-            }
-          ]
+          children: [{
+            path: "friendContent",
+            name: "friendContent",
+            component: resolve =>
+              require(["../components/content/home/Friend.vue"], resolve)
+          }]
         },
         {
           path: "anchorStation",
           name: "anchorStation",
           component: resolve =>
             require(["../components/content/home/Index.vue"], resolve),
-          children: [
-            {
-              path: "anchorStationContent",
-              name: "anchorStationContent",
-              component: resolve =>
-                require([
-                  "../components/content/home/AnchorStation.vue"
-                ], resolve)
-            }
-          ]
+          children: [{
+            path: "anchorStationContent",
+            name: "anchorStationContent",
+            component: resolve =>
+              require([
+                "../components/content/home/AnchorStation.vue"
+              ], resolve)
+          }]
         }
       ]
     },
@@ -195,8 +187,7 @@ export default new Router({
       path: "/video",
       component: resolve => require(["../components/Index.vue"], resolve),
       redirect: "/video/videoRecommend",
-      children: [
-        {
+      children: [{
           path: "videoRecommend",
           name: "videoRecommend"
           // component: resolve =>
@@ -249,8 +240,7 @@ export default new Router({
       path: "/play",
       name: "play",
       component: resolve => require(["../components/common/Play.vue"], resolve)
-    },
-    {
+    }, {
       path: "/dayRecommend",
       name: "dayRecommend",
       component: resolve =>
