@@ -3,7 +3,7 @@
     <keep-alive>
       <router-view/>
     </keep-alive>
-    <app-footer></app-footer>
+    <!-- <app-footer v-if="$route.path!=='/login'&&$route.path!=='/phoneLogin'"></app-footer> -->
     <app-message></app-message>
   </div>
 </template>

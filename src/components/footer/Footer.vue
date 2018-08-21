@@ -47,7 +47,7 @@
           </svg>
         </div>
       </div>
-      <audio class="audio" controls>
+      <audio class="audio" controls ref="audio">
         <source :src="currentSongUrl"> 您的浏览器不支持 audio 元素。
       </audio>
     </div>
@@ -129,11 +129,6 @@ export default {
       isSlideShow: false //更多内容是否显示。
     };
   },
-  watch: {
-    currentUrl(oldVal, val) {
-      this.play(); //只要监听到值发生了变化，就播放。
-    }
-  },
   methods: {
     playCurrent(item, index) {
       this.$store.commit("putCurrentSong", item);
@@ -144,6 +139,7 @@ export default {
           this.currentSongUrl = url;
         }
         this.$store.commit("CurrentSongUrl", url);
+        this.play();
       });
     },
     //歌曲播放规则，单曲，循环，随机
@@ -209,6 +205,7 @@ export default {
     },
     // 暂停歌曲
     pauseMusic() {
+      console.log(123);
       let audio = document.querySelector("audio");
       audio.pause();
       this.isPlayIcon = false;
@@ -217,6 +214,7 @@ export default {
     // 重新播放歌曲
     playMusic() {
       let audio = document.querySelector("audio");
+      // let audio = this.$refs.audio;
       audio.play();
       this.isPlayIcon = true;
       this.rotateDeg();
@@ -258,12 +256,23 @@ export default {
       });
     }
   },
+  watch: {
+    // currentUrl(oldVal, val) {
+    //   console.log(oldVal, val);
+    //   this.play();
+    // },
+    $route(to, from) {
+      let audio = document.querySelector("audio");
+      audio.load();
+      audio.play();
+      // this.playMusic();
+    }
+  },
   computed: mapState(["currentPlay", "currentUrl", "currentIndex"]),
   created() {
     this.getSongList();
   },
   mounted() {
-    // console.log(this.currentUrl);
     let scroll = new Bscroll(this.$refs.scrollWrap);
   }
 };
@@ -304,7 +313,6 @@ export default {
       justify-content: center;
       overflow: hidden;
     }
-
     svg {
       width: 1.5rem;
       height: 1.5rem;
@@ -339,7 +347,6 @@ export default {
     position: relative;
     border-radius: 50%;
   }
-
   .pie_left,
   .left {
     clip: rect(0, 17px, auto, 0);
@@ -354,7 +361,6 @@ export default {
     // -webkit-transition: -webkit-transform 1s ease-in 0s;
     // -moz-transition: -moz-transform 1s ease-in 0s;
   }
-
   .pie_left,
   .pie_right {
     width: 34px;
@@ -452,7 +458,6 @@ export default {
       svg {
         margin-right: 0.31rem;
       }
-
       span:last-of-type {
         color: rgba(130, 130, 130, 0.6);
         font-size: 12px;
@@ -481,7 +486,6 @@ export default {
   transform: translateY(0);
   transition: 0.4s ease;
 }
-
 .slide_down {
   transform: translateY(-100vh);
   transition: 0.4s ease;

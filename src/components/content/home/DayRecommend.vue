@@ -121,6 +121,7 @@ export default {
     },
     // 播放当前歌曲
     playCurrent(item, index) {
+      let audio = document.querySelector("audio");
       this.currentItem = item;
       this.$store.commit("currentSongIndex", index);
       this.songPlay();
