@@ -1,31 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Header from "@/components/header/Header";
-import Footer from "@/components/footer/Footer";
-// 本地
-import Local from "@/components/content/local/Local";
-// 本地
-// 首页
-import HomeRecommend from "@/components/content/home/HomeRecommend";
-import Friend from "@/components/content/home/Friend";
-import AnchorStation from "@/components/content/home/AnchorStation";
-import DayRecommend from "@/components/content/home/DayRecommend";
-// 首页
-// 视频
-import videoRecommend from "@/components/content/video/Recommend";
-import Music from "@/components/content/video/Music";
-import ShowTime from "@/components/content/video/ShowTime";
-import Mv from "@/components/content/video/Mv";
-import SecondElement from "@/components/content/video/SecondElement";
-import Dance from "@/components/content/video/Dance";
-// 视频
-//登录
-import Login from "@/components/Login";
-import Index from "@/components/Index";
-import PhoneLogin from "@/components/PhoneLogin";
-// import MuseUI from "muse-ui";
-// import "muse-ui/dist/muse-ui.css";完整引入
-import Play from "@/components/common/Play";
 //按需引入
 
 import "muse-ui/lib/styles/base.less";
@@ -125,7 +99,8 @@ Vue.use(Router);
 export default new Router({
   mode: "history",
   linkActiveClass: "active",
-  routes: [{
+  routes: [
+    {
       path: "/",
       redirect: "/home/recommend/recommendContent"
     },
@@ -133,118 +108,120 @@ export default new Router({
     {
       path: "/local",
       name: "local",
-      component: resolve => require(["../components/Index.vue"], resolve)
+      component: resolve => require(["views/Index.vue"], resolve)
     },
     // 首页
     {
       path: "/home",
-      component: resolve => require(["../components/Index.vue"], resolve),
+      component: resolve => require(["views/Index.vue"], resolve),
       redirect: "/home/recommend/recommendContent",
-      children: [{
+      children: [
+        {
           path: "recommend",
           name: "recommend",
           component: resolve =>
-            require(["../components/content/home/Index.vue"], resolve),
-          children: [{
-            path: "recommendContent",
-            name: "recommendContent",
-            component: resolve =>
-              require([
-                "../components/content/home/HomeRecommend.vue"
-              ], resolve)
-          }]
+            require(["views/content/home/Index.vue"], resolve),
+          children: [
+            {
+              path: "recommendContent",
+              name: "recommendContent",
+              component: resolve =>
+                require(["views/content/home/HomeRecommend.vue"], resolve)
+            }
+          ]
         },
         {
           path: "friend",
           name: "friend",
           component: resolve =>
-            require(["../components/content/home/Index.vue"], resolve),
-          children: [{
-            path: "friendContent",
-            name: "friendContent",
-            component: resolve =>
-              require(["../components/content/home/Friend.vue"], resolve)
-          }]
+            require(["views/content/home/Index.vue"], resolve),
+          children: [
+            {
+              path: "friendContent",
+              name: "friendContent",
+              component: resolve =>
+                require(["views/content/home/Friend.vue"], resolve)
+            }
+          ]
         },
         {
           path: "anchorStation",
           name: "anchorStation",
           component: resolve =>
-            require(["../components/content/home/Index.vue"], resolve),
-          children: [{
-            path: "anchorStationContent",
-            name: "anchorStationContent",
-            component: resolve =>
-              require([
-                "../components/content/home/AnchorStation.vue"
-              ], resolve)
-          }]
+            require(["views/content/home/Index.vue"], resolve),
+          children: [
+            {
+              path: "anchorStationContent",
+              name: "anchorStationContent",
+              component: resolve =>
+                require(["views/content/home/AnchorStation.vue"], resolve)
+            }
+          ]
         }
       ]
     },
     // 视频
     {
       path: "/video",
-      component: resolve => require(["../components/Index.vue"], resolve),
+      component: resolve => require(["views/Index.vue"], resolve),
       redirect: "/video/videoRecommend",
-      children: [{
+      children: [
+        {
           path: "videoRecommend",
           name: "videoRecommend"
-          // component: resolve =>
-          //   require(['../components/content/video/Recommend.vue'], resolve),
         },
         {
           path: "music",
           name: "music",
           component: resolve =>
-            require(["../components/content/video/Music.vue"], resolve)
+            require(["views/content/video/Music.vue"], resolve)
         },
         {
           path: "showTime",
           name: "showTime",
           component: resolve =>
-            require(["../components/content/video/ShowTime.vue"], resolve)
+            require(["views/content/video/ShowTime.vue"], resolve)
         },
         {
           path: "mv",
           name: "mv",
-          component: resolve =>
-            require(["../components/content/video/Mv.vue"], resolve)
+          component: resolve => require(["views/content/video/Mv.vue"], resolve)
         },
 
         {
           path: "secondElement",
           name: "secondElement",
           component: resolve =>
-            require(["../components/content/video/SecondElement.vue"], resolve)
+            require(["views/content/video/SecondElement.vue"], resolve)
         },
         {
           path: "dance",
           name: "dance",
           component: resolve =>
-            require(["../components/content/video/Dance.vue"], resolve)
+            require(["views/content/video/Dance.vue"], resolve)
         }
       ]
     }, //登录
     {
       path: "/login",
       name: "login",
-      component: resolve => require(["../components/Login.vue"], resolve)
+      component: resolve => require(["views/Login.vue"], resolve)
     },
     {
       path: "/phoneLogin",
       name: "phoneLogin",
-      component: resolve => require(["../components/PhoneLogin.vue"], resolve)
+      component: resolve => require(["views/PhoneLogin.vue"], resolve)
     },
     {
       path: "/play",
       name: "play",
-      component: resolve => require(["../components/common/Play.vue"], resolve)
-    }, {
+      component: resolve => require(["views/common/Play.vue"], resolve)
+    },
+    {
       path: "/dayRecommend",
       name: "dayRecommend",
       component: resolve =>
-        require(["../components/content/home/DayRecommend.vue"], resolve)
+        require(["views/content/home/DayRecommend.vue"], resolve)
     }
   ]
 });

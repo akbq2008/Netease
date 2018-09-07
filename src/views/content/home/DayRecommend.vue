@@ -76,7 +76,6 @@
       </div>
       <!-- 歌单列表 -->
     </div>
-    <app-footer></app-footer>
   </div>
 </template>
 
@@ -121,13 +120,14 @@ export default {
     },
     // 播放当前歌曲
     playCurrent(item, index) {
-      let audio = document.querySelector("audio");
       this.currentItem = item;
       this.$store.commit("currentSongIndex", index);
       this.songPlay();
+      this.$store.commit("changePlay", true);
       this.$store.commit("putCurrentSong", this.currentItem);
       this.getSongUrl(this.currentItem);
     },
+    // 播放标志
     songPlay() {
       this.song.forEach(song => {
         song.id === this.currentItem.id

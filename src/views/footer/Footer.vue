@@ -14,7 +14,7 @@
       </div>
       <div class="footer_right">
         <div v-if="!isPlayIcon" @touchstart="playMusic" class="playMusic comm ">
-          <div class="circle" style="background:red" v-cloak>
+          <div class="circle" style="background:red">
             <svg class="play_icon" aria-hidden="true">
               <use xlink:href="#icon-bofang1"></use>
             </svg>
@@ -48,7 +48,7 @@
         </div>
       </div>
       <audio class="audio" controls ref="audio">
-        <source :src="currentSongUrl"> 您的浏览器不支持 audio 元素。
+        <source :src="$store.state.currentUrl"> 您的浏览器不支持 audio 元素。
       </audio>
     </div>
     <div class="more_musicList_shadow" ref="wrap" @touchmove.prevent>
@@ -139,6 +139,7 @@ export default {
           this.currentSongUrl = url;
         }
         this.$store.commit("CurrentSongUrl", url);
+        this.$store.commit("changePlay", true);
         this.play();
       });
     },
@@ -160,7 +161,7 @@ export default {
     },
     // 播放歌曲
     play() {
-      this.currentSongUrl = this.currentUrl;
+      this.currentSongUrl = this.$store.state.currentUrl;
       let audio = document.querySelector("audio");
       this.isPlayIcon = true;
       audio.load(); //要加载资源
@@ -205,7 +206,6 @@ export default {
     },
     // 暂停歌曲
     pauseMusic() {
-      console.log(123);
       let audio = document.querySelector("audio");
       audio.pause();
       this.isPlayIcon = false;
@@ -256,21 +256,17 @@ export default {
       });
     }
   },
-  watch: {
-    // currentUrl(oldVal, val) {
-    //   console.log(oldVal, val);
-    //   this.play();
-    // },
-    $route(to, from) {
-      let audio = document.querySelector("audio");
-      audio.load();
-      audio.play();
-      // this.playMusic();
-    }
-  },
-  computed: mapState(["currentPlay", "currentUrl", "currentIndex"]),
+  computed: mapState(["currentPlay", "currentUrl", "currentIndex", "isPlay"]),
   created() {
     this.getSongList();
+  },
+  watch: {
+    //切换歌曲的时候进行播放
+    currentUrl(old, New) {
+      if (old) {
+        this.play();
+      }
+    }
   },
   mounted() {
     let scroll = new Bscroll(this.$refs.scrollWrap);
@@ -279,13 +275,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.footer {
+.footer_container {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   height: 2.75rem;
   z-index: 100;
+}
+.footer {
   background: white;
   border-top: 1px solid #ddd;
   display: flex;
@@ -339,7 +337,7 @@ export default {
     }
   }
   .audio {
-    // display: none;
+    display: none;
   }
   .circle {
     width: 34px;

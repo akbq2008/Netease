@@ -1,17 +1,17 @@
 <template>
   <div id="app">
+    <router-view/>
     <keep-alive>
-      <router-view/>
+      <app-footer v-if="$route.path!=='/login'&&$route.path!=='/phoneLogin'"></app-footer>
     </keep-alive>
-    <!-- <app-footer v-if="$route.path!=='/login'&&$route.path!=='/phoneLogin'"></app-footer> -->
     <app-message></app-message>
   </div>
 </template>
 
 <script>
 //公共部分
-import Message from "./components/common/Message";
-import Footer from "./components/footer/Footer";
+import Message from "views/common/Message";
+import Footer from "views/footer/Footer";
 import Vue from "vue";
 export default {
   name: "App",
