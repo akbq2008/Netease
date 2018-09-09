@@ -55,40 +55,13 @@ export default {
         phone: this.form.phoneNum,
         password: this.form.pwd
       };
-      await this.$store.dispatch("LoginByPhone", formData).then(data => {
-        console.log(data);
-        let _this = this;
-        data = data.data;
-        if (data.code === 502) {
-          _this.Toast(data.msg);
-        }
-        if (data.code === 200) {
+      await this.$store
+        .dispatch("LoginByPhone", formData)
+        .then(() => {
           loading.close();
-          _this.$store.commit("putloginInfo", data);
-          localStorage.setItem("isLogin", true);
-          _this.$router.push("/home/recommend/recommendContent");
-        }
-      });
-      //  this.$axios
-      //     .post(
-      //       "/login/cellphone?phone=" +
-      //         this.form.phoneNum +
-      //         "&password=" +
-      //         this.form.pwd
-      //     )
-      //     .then(data => {
-      //       let _this = this;
-      //       data = data.data;
-      //       if (data.code === 502) {
-      //         _this.Toast(data.msg);
-      //       }
-      //       if (data.code === 200) {
-      //         loading.close();
-      //         _this.$store.commit("putloginInfo", data);
-      //         localStorage.setItem("isLogin", true);
-      //         _this.$router.push("/home/recommend/recommendContent");
-      //       }
-      //     });
+          this.$router.push("/home/recommend/recommendContent");
+        })
+        .catch(err => console.log(err));
     },
     filterInput() {
       this.form.phoneNum = this.form.phoneNum.replace(/[^0-9]$/g, "");

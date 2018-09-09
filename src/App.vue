@@ -15,33 +15,8 @@ import Footer from "views/footer/Footer";
 import Vue from "vue";
 export default {
   name: "App",
-  methods: {
-    // refreshToken() {
-    //   if (this.$store.state) {
-    //     let refreshTime = this.$store.state.userInfo[0].bindings[0].refreshTime;
-    //     let expiresIn = this.$store.state.userInfo[0].bindings[0].expiresIn;
-    //     // console.log(this);
-    //     let myFilter = Vue.filter("timeTo");
-    //     // console.log(myFilter(refreshTime, 1), myFilter(expiresIn, 1));
-    //   }
-    // }
-  },
-  created() {
-    // localStorage.getItem("isLogin") && !this.$store.state.userInfo
-    //   ? (this.$store.state.userInfo = localStorage.getItem("userInfo"))
-    //   : this.$store.state.userInfo;
-    let arr = [];
-    arr.push(JSON.parse(localStorage.getItem("userInfo")));
-    if (
-      localStorage.getItem("isLogin") &&
-      this.$store.state.song.userInfo.length === 0
-    ) {
-      this.$store.commit("putLogin", arr);
-    }
-  },
-  mounted() {
-    // this.refreshToken();
-  },
+  methods: {},
+  created() {},
   components: {
     "app-message": Message,
     "app-footer": Footer

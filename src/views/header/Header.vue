@@ -218,19 +218,16 @@ export default {
     };
   },
   computed: mapState({
-    userInfo: state => state.song.userInfo
+    userInfo: state => state.user.userInfo
   }),
 
   methods: {
     // 退出
     exit() {
-      localStorage.setItem("isLogin", false);
-      this.$store.commit("clearUserInfo", []);
-      this.$router.push("/login");
+      this.$store.dispatch("LogOut");
     },
     //显示
     showLogin() {
-      // console.log(this.loginisShow, this.isLeft);
       this.loginisShow = !this.loginisShow;
       this.isLeft = false;
     },

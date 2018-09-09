@@ -6,7 +6,6 @@ const song = {
     confirmisShow: false, //confirm是否显示
     songList: [], //歌单
     currentSong: [], //全部
-    userInfo: [], //登录后的用户信息
     currentPlay: [], //当前播放的
     currentUrl: "", //当前歌曲的url
     currentIndex: 0, //当前歌曲的索引
@@ -42,21 +41,6 @@ const song = {
       state.currentPlay = [];
       payload.isPlay = true;
       state.currentPlay.push(payload);
-    },
-    //清空用户信息
-    clearUserInfo(state, payload) {
-      state.userInfo = payload;
-    },
-    //存取数据
-    putloginInfo(state, payload) {
-      state.userInfo.push(payload);
-      payload = JSON.stringify(payload);
-      console.log(payload);
-      localStorage.setItem("userInfo", payload);
-    },
-    // localStorege中的信息
-    putLogin(state, payload) {
-      state.userInfo = payload;
     },
     //歌单数据初始化
     pustSongList(state, payload) {
