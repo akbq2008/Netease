@@ -34,7 +34,7 @@ export default {
     arr.push(JSON.parse(localStorage.getItem("userInfo")));
     if (
       localStorage.getItem("isLogin") &&
-      this.$store.state.userInfo.length === 0
+      this.$store.state.song.userInfo.length === 0
     ) {
       this.$store.commit("putLogin", arr);
     }

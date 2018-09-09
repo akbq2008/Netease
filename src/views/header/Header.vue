@@ -217,7 +217,10 @@ export default {
       isLeft: false //左滑动画
     };
   },
-  computed: mapState(["userInfo"]),
+  computed: mapState({
+    userInfo: state => state.song.userInfo
+  }),
+
   methods: {
     // 退出
     exit() {

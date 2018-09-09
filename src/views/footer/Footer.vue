@@ -48,7 +48,7 @@
         </div>
       </div>
       <audio class="audio" controls ref="audio">
-        <source :src="$store.state.currentUrl"> 您的浏览器不支持 audio 元素。
+        <source :src="$store.state.song.currentUrl"> 您的浏览器不支持 audio 元素。
       </audio>
     </div>
     <div class="more_musicList_shadow" ref="wrap" @touchmove.prevent>
@@ -89,7 +89,7 @@
           <ul>
             <li class="circle_list" v-for="(item,index) in song" :key="index" @touchend="playCurrent(item, index)">
               <div class="left">
-                <svg class="isPlay" aria-hidden="true" v-if="$store.state.currentPlay[0]&&item.name==$store.state.currentPlay[0].name">
+                <svg class="isPlay" aria-hidden="true" v-if="$store.state.song.currentPlay[0]&&item.name==$store.state.song.currentPlay[0].name">
                   <use xlink:href="#icon-yinliang"></use>
                 </svg>
                 <span>{{item.name}}-</span>
@@ -161,7 +161,7 @@ export default {
     },
     // 播放歌曲
     play() {
-      this.currentSongUrl = this.$store.state.currentUrl;
+      this.currentSongUrl = this.$store.state.song.currentUrl;
       let audio = document.querySelector("audio");
       this.isPlayIcon = true;
       audio.load(); //要加载资源

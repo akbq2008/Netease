@@ -43,7 +43,7 @@
         <div class="songList" v-for="(item,index) in song" :key="index" v-scrollNo @touchend="playCurrent(item,index)">
           <div class="songList_left">
             <!-- 播放状态同步 -->
-            <svg class="isPlay" aria-hidden="true" v-if="$store.state.currentPlay[0]&&item.name==$store.state.currentPlay[0].name">
+            <svg class="isPlay" aria-hidden="true" v-if="$store.state.song.currentPlay[0]&&item.name==$store.state.song.currentPlay[0].name">
               <use xlink:href="#icon-yinliang"></use>
             </svg>
             <img :src="item.album.picUrl" v-else />
@@ -99,7 +99,7 @@ export default {
     //歌曲播放规则，单曲，循环，随机
     songTypeFun() {
       let item;
-      switch (this.songType) {
+      switch (this.$store.state.song.songType) {
         // 列表循环
         case 1:
           item = this.song[0];
@@ -113,8 +113,8 @@ export default {
           break;
         // 单曲循环
         case 3:
-          item = this.song[this.currentIndex];
-          this.playCurrent(item, this.currentIndex);
+          item = this.song[this.$store.state.song.currentIndex];
+          this.playCurrent(item, this.$store.state.song.currentIndex);
           break;
       }
     },

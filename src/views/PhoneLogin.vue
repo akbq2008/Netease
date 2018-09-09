@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     //手机号登录
-    phoneLogin() {
+    async phoneLogin() {
       if (!this.form.phoneNum) {
         this.Toast("请输入手机号");
         return;
@@ -51,27 +51,44 @@ export default {
       });
       // this.form.phoneNum = "17681863293";
       // this.form.pwd = "a123456";
-      this.$axios
-        .post(
-          "/login/cellphone?phone=" +
-            this.form.phoneNum +
-            "&password=" +
-            this.form.pwd
-        )
-        .then(data => {
-          let _this = this;
-          data = data.data;
-          if (data.code === 502) {
-            _this.Toast(data.msg);
-          }
-          if (data.code === 200) {
-            loading.close();
-            _this.$store.commit("putloginInfo", data);
-            localStorage.setItem("isLogin", true);
-            // console.log(localStorage.getItem("userInfo"));
-            _this.$router.push("/home/recommend/recommendContent");
-          }
-        });
+      let formData = {
+        phone: this.form.phoneNum,
+        password: this.form.pwd
+      };
+      await this.$store.dispatch("LoginByPhone", formData).then(data => {
+        console.log(data);
+        let _this = this;
+        data = data.data;
+        if (data.code === 502) {
+          _this.Toast(data.msg);
+        }
+        if (data.code === 200) {
+          loading.close();
+          _this.$store.commit("putloginInfo", data);
+          localStorage.setItem("isLogin", true);
+          _this.$router.push("/home/recommend/recommendContent");
+        }
+      });
+      //  this.$axios
+      //     .post(
+      //       "/login/cellphone?phone=" +
+      //         this.form.phoneNum +
+      //         "&password=" +
+      //         this.form.pwd
+      //     )
+      //     .then(data => {
+      //       let _this = this;
+      //       data = data.data;
+      //       if (data.code === 502) {
+      //         _this.Toast(data.msg);
+      //       }
+      //       if (data.code === 200) {
+      //         loading.close();
+      //         _this.$store.commit("putloginInfo", data);
+      //         localStorage.setItem("isLogin", true);
+      //         _this.$router.push("/home/recommend/recommendContent");
+      //       }
+      //     });
     },
     filterInput() {
       this.form.phoneNum = this.form.phoneNum.replace(/[^0-9]$/g, "");
