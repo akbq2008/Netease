@@ -224,7 +224,9 @@ export default {
   methods: {
     // 退出
     exit() {
-      this.$store.dispatch("LogOut");
+      this.$store.dispatch("LogOut").then(() => {
+        this.$router.push("/login");
+      });
     },
     //显示
     showLogin() {
@@ -245,7 +247,6 @@ export default {
       if (this.loginisShow) {
         this.$nextTick(() => {
           this.scroll = new Bscroll(this.$refs.loginFloor);
-          console.log(this.scroll);
         });
       }
     }

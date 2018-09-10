@@ -6,6 +6,5 @@ export function Login(username, password) {
 }
 
 export function getUser(uid) {
-  console.log("uid", uid);
   return request("/user/detail?uid=" + uid);
 }

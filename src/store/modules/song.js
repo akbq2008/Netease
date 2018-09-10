@@ -13,12 +13,6 @@ const song = {
     isPlay: false //当前是否在播放
   },
   //获取属性
-  getters: {
-    // nextIndex: state => {
-    //   console.log(state.currentIndex);
-    //   return state.currentIndex + 1;
-    // }
-  },
   //改变属性
   mutations: {
     changePlay(state, p) {

@@ -99,7 +99,7 @@ export default {
     //歌曲播放规则，单曲，循环，随机
     songTypeFun() {
       let item;
-      switch (this.$store.state.song.songType) {
+      switch (this.songType) {
         // 列表循环
         case 1:
           item = this.song[0];
@@ -113,8 +113,8 @@ export default {
           break;
         // 单曲循环
         case 3:
-          item = this.song[this.$store.state.song.currentIndex];
-          this.playCurrent(item, this.$store.state.song.currentIndex);
+          item = this.song[this.currentIndex];
+          this.playCurrent(item, this.currentIndex);
           break;
       }
     },
@@ -161,7 +161,11 @@ export default {
   mounted() {
     this.songPlay();
   },
-  computed: mapState(["songType", "currentIndex"]),
+  // this.
+  computed: mapState({
+    songType: state => state.song.songType,
+    currentIndex: state => state.song.currentIndex
+  }),
   components: {
     "app-footer": Footer
   }

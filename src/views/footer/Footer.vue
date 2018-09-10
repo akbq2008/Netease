@@ -48,7 +48,7 @@
         </div>
       </div>
       <audio class="audio" controls ref="audio">
-        <source :src="$store.state.song.currentUrl"> 您的浏览器不支持 audio 元素。
+        <source :src="currentUrl"> 您的浏览器不支持 audio 元素。
       </audio>
     </div>
     <div class="more_musicList_shadow" ref="wrap" @touchmove.prevent>
@@ -89,7 +89,7 @@
           <ul>
             <li class="circle_list" v-for="(item,index) in song" :key="index" @touchend="playCurrent(item, index)">
               <div class="left">
-                <svg class="isPlay" aria-hidden="true" v-if="$store.state.song.currentPlay[0]&&item.name==$store.state.song.currentPlay[0].name">
+                <svg class="isPlay" aria-hidden="true" v-if="currentPlay[0]&&item.name==currentPlay[0].name">
                   <use xlink:href="#icon-yinliang"></use>
                 </svg>
                 <span>{{item.name}}-</span>
@@ -161,7 +161,7 @@ export default {
     },
     // 播放歌曲
     play() {
-      this.currentSongUrl = this.$store.state.song.currentUrl;
+      this.currentSongUrl = this.currentUrl;
       let audio = document.querySelector("audio");
       this.isPlayIcon = true;
       audio.load(); //要加载资源
@@ -175,34 +175,36 @@ export default {
         this.rotateDeg();
       };
       audio.play();
-      audio.onended = () => {
-        // 当前歌曲播放完毕时,自动播放下一首。播放类型？循环，随机，单曲
-        if (audio.ended) {
-          let nextIndex = 0;
-          switch (this.songType) {
-            // 列表循环
-            case 1:
-              if (this.currentIndex == this.song.length - 1) {
-                nextIndex = 0;
-              } else if (this.currentIndex != this.song.length - 1) {
-                nextIndex = this.currentIndex + 1;
-              }
-              break;
-            // 随机播放
-            case 2:
-              nextIndex = Math.floor(this.song.length * Math.random());
-              break;
-            // 单曲循环
-            case 3:
-              nextIndex = this.currentIndex;
-              break;
-              return nextIndex;
-          }
-          console.log(nextIndex);
-          this.playCurrent(this.song[nextIndex]);
-          this.$store.commit("currentSongIndex", nextIndex);
+      audio.onended = () => {};
+      // 当前歌曲播放完毕时,自动播放下一首。播放类型？循环，随机，单曲
+      this.currentLeftDeg = 0;
+      this.currentRightDeg = 0;
+      if (audio.ended) {
+        let nextIndex = 0;
+        switch (this.songType) {
+          // 列表循环
+          case 1:
+            if (this.currentIndex == this.song.length - 1) {
+              nextIndex = 0;
+            } else if (this.currentIndex != this.song.length - 1) {
+              nextIndex = this.currentIndex + 1;
+            }
+            break;
+          // 随机播放
+          case 2:
+            nextIndex = Math.floor(this.song.length * Math.random());
+            break;
+          // 单曲循环
+          case 3:
+            nextIndex = this.currentIndex;
+            break;
+            return nextIndex;
         }
-      };
+        console.log(this.currentLeftDeg, audio.currentTime);
+        this.playCurrent(this.song[nextIndex]);
+        this.$store.commit("currentSongIndex", nextIndex);
+        // }
+      }
     },
     // 暂停歌曲
     pauseMusic() {
@@ -256,7 +258,12 @@ export default {
       });
     }
   },
-  computed: mapState(["currentPlay", "currentUrl", "currentIndex", "isPlay"]),
+  computed: mapState({
+    currentPlay: state => state.song.currentPlay,
+    currentUrl: state => state.song.currentUrl,
+    currentIndex: state => state.song.currentIndex,
+    isPlay: state => state.song.isPlay
+  }),
   created() {
     this.getSongList();
   },
@@ -280,7 +287,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 2.75rem;
+  height: 43px;
   z-index: 100;
 }
 .footer {
@@ -288,6 +295,7 @@ export default {
   border-top: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
+  height: 43px;
   .footer_left {
     flex: 1;
     display: flex;
@@ -348,16 +356,10 @@ export default {
   .pie_left,
   .left {
     clip: rect(0, 17px, auto, 0);
-    // transition: transform 0.4s ease-in 1s;
-    // -webkit-transition: -webkit-transform 0.4s ease-in 1s;
-    // -moz-transition: -moz-transform 0.4s ease-in 1s;
   }
   .pie_right,
   .right {
     clip: rect(0, auto, auto, 17px);
-    // transition: transform 1s ease-in 0s;
-    // -webkit-transition: -webkit-transform 1s ease-in 0s;
-    // -moz-transition: -moz-transform 1s ease-in 0s;
   }
   .pie_left,
   .pie_right {

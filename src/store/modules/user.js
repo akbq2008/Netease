@@ -64,7 +64,6 @@ const user = {
       return new Promise((resolve, reject) => {
         getUser(uid).then(response => {
           const data = response.data;
-          console.log(data);
           commit("SET_USER", data);
           resolve();
         }).catch(error => {
@@ -78,6 +77,7 @@ const user = {
       return new Promise(resolve => {
         commit('SET_TOKEN', '');
         commit('SET_ID', '');
+        localStorage.removeItem("userId");
         removeToken();
         resolve();
       })
