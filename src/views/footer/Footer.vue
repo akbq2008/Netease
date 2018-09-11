@@ -1,7 +1,7 @@
 <template>
   <div class="footer_container">
     <!-- 播放状态栏 -->
-    <div class="footer" v-for="(item,index) in currentPlay" :key="index">
+    <div class="footer" v-for="(item,index) in currentPlay" :key="index" @touchstart.stop="playDetail(item)">
       <div class="footer_left">
         <img :src="item.album.picUrl" alt="">
         <div>
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="footer_right">
-        <div v-if="!isPlayIcon" @touchstart="playMusic" class="playMusic comm ">
+        <div v-if="!isPlayIcon" @touchstart.stop="playMusic" class="playMusic comm ">
           <div class="circle" style="background:red">
             <svg class="play_icon" aria-hidden="true">
               <use xlink:href="#icon-bofang1"></use>
@@ -27,7 +27,7 @@
             <div class="mask"></div>
           </div>
         </div>
-        <div v-else @touchstart="pauseMusic" class="pasuMusic comm">
+        <div v-else @touchstart.stop="pauseMusic" class="pasuMusic comm">
           <div class="circle" style="background:red" v-cloak>
             <svg aria-hidden="true" class="play_icon2">
               <use xlink:href="#icon-zanting"></use>
@@ -42,7 +42,7 @@
           </div>
         </div>
         <div class="comm">
-          <svg class="icon" aria-hidden="true" @touchstart.prevent="slideUp">
+          <svg class="icon" aria-hidden="true" @touchstart.stop.prevent="slideUp">
             <use xlink:href="#icon-gengduo"></use>
           </svg>
         </div>
@@ -52,11 +52,11 @@
       </audio>
     </div>
     <div class="more_musicList_shadow" ref="wrap" @touchmove.prevent>
-      <div class="shadow" @touchstart.prevent="slideUp">
+      <div class="shadow" @touchstart.stop.prevent="slideUp">
       </div>
       <div class="more_musicList">
         <div class="wrap">
-          <div class="wrap_left" @touchstart="songTypeFun">
+          <div class="wrap_left" @touchstart.stop="songTypeFun">
             <svg class="icon" aria-hidden="true" v-if="songType==1">
               <use xlink:href="#icon-liebiaoxunhuan"></use>
             </svg>
@@ -94,10 +94,10 @@
                 </svg>
                 <span>{{item.name}}-</span>
                 <span v-for="(art,index) in item.artists" :key="art.id" v-if="index<2">
-                  {{art.name}}/
+                  {{art.name}}
                 </span>
               </div>
-              <svg class="icon" aria-hidden="true">
+              <svg class="icon" aria-hidden="true" @touchend.stop="removeItem(index)">
                 <use xlink:href="#icon-guanbi"></use>
               </svg>
             </li>
@@ -116,6 +116,7 @@ export default {
   data() {
     return {
       song: [],
+      backSong: [],
       currentSong: [],
       songType: 1, //默认为循环
       currentSongUrl: "",
@@ -130,6 +131,13 @@ export default {
     };
   },
   methods: {
+    /**
+     * 播放详情页
+     */
+    playDetail(item) {
+      // console.log()
+      this.$router.push({ name: "currentPlay", params: { song: item } });
+    },
     playCurrent(item, index) {
       this.$store.commit("putCurrentSong", item);
       this.$store.commit("currentSongIndex", index);
@@ -175,36 +183,34 @@ export default {
         this.rotateDeg();
       };
       audio.play();
-      audio.onended = () => {};
-      // 当前歌曲播放完毕时,自动播放下一首。播放类型？循环，随机，单曲
-      this.currentLeftDeg = 0;
-      this.currentRightDeg = 0;
-      if (audio.ended) {
-        let nextIndex = 0;
-        switch (this.songType) {
-          // 列表循环
-          case 1:
-            if (this.currentIndex == this.song.length - 1) {
-              nextIndex = 0;
-            } else if (this.currentIndex != this.song.length - 1) {
-              nextIndex = this.currentIndex + 1;
-            }
-            break;
-          // 随机播放
-          case 2:
-            nextIndex = Math.floor(this.song.length * Math.random());
-            break;
-          // 单曲循环
-          case 3:
-            nextIndex = this.currentIndex;
-            break;
-            return nextIndex;
+      audio.onended = () => {
+        // 当前歌曲播放完毕时,自动播放下一首。播放类型？循环，随机，单曲
+        if (audio.ended) {
+          let nextIndex = 0;
+          switch (this.songType) {
+            // 列表循环
+            case 1:
+              if (this.currentIndex == this.song.length - 1) {
+                nextIndex = 0;
+              } else if (this.currentIndex != this.song.length - 1) {
+                nextIndex = this.currentIndex + 1;
+              }
+              break;
+            // 随机播放
+            case 2:
+              nextIndex = Math.floor(this.song.length * Math.random());
+              break;
+            // 单曲循环
+            case 3:
+              nextIndex = this.currentIndex;
+              break;
+              return nextIndex;
+          }
+          this.playCurrent(this.song[nextIndex]);
+          this.$store.commit("currentSongIndex", nextIndex);
+          // }
         }
-        console.log(this.currentLeftDeg, audio.currentTime);
-        this.playCurrent(this.song[nextIndex]);
-        this.$store.commit("currentSongIndex", nextIndex);
-        // }
-      }
+      };
     },
     // 暂停歌曲
     pauseMusic() {
@@ -239,7 +245,7 @@ export default {
           let left = document.querySelector(".left");
           let right = document.querySelector(".right");
           if (audio.currentTime <= this.halfDuration) {
-            this.currentRightDeg = Math.floor(this.sdeg * audio.currentTime);
+            this.currentRightDeg = Math.ceil(this.sdeg * audio.currentTime);
             if (right) {
               right.style.transform = "rotate(" + this.currentRightDeg + "deg)";
             }
@@ -248,14 +254,23 @@ export default {
             audio.currentTime <= this.duration &&
             audio.currentTime > this.halfDuration
           ) {
-            this.currentLeftDeg = Math.floor(
-              this.sdeg * (audio.currentTime - this.halfDuration)
-            );
-            left.style.transform = "rotate(" + this.currentLeftDeg + "deg)";
+            // 解决切换到下一首时，左边部分仍然显示红色
+            if (!audio.ended) {
+              this.currentLeftDeg = Math.ceil(
+                this.sdeg * (audio.currentTime - this.halfDuration)
+              );
+              left.style.transform = "rotate(" + this.currentLeftDeg + "deg)";
+            } else {
+              left.style.transform = "rotate(0deg)";
+            }
             // 左边旋转
           }
         }, 0);
       });
+    },
+    // 清除Index歌曲
+    removeItem(index) {
+      this.song.splice(index, 1);
     }
   },
   computed: mapState({

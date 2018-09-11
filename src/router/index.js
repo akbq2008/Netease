@@ -99,7 +99,8 @@ Vue.use(Router);
 export default new Router({
   mode: "history",
   linkActiveClass: "active",
-  routes: [{
+  routes: [
+    {
       path: "/",
       redirect: "/home/recommend/recommendContent"
     },
@@ -107,87 +108,137 @@ export default new Router({
     {
       path: "/local",
       name: "local",
+      meta: {
+        keepAlive: true
+      },
       component: resolve => require(["views/Index.vue"], resolve)
     },
     // 首页
     {
       path: "/home",
+      meta: {
+        keepAlive: true
+      },
       component: resolve => require(["views/Index.vue"], resolve),
       redirect: "/home/recommend/recommendContent",
-      children: [{
+      children: [
+        {
           path: "recommend",
           name: "recommend",
+          meta: {
+            keepAlive: true
+          },
           component: resolve =>
             require(["views/content/home/Index.vue"], resolve),
-          children: [{
-            path: "recommendContent",
-            name: "recommendContent",
-            component: resolve =>
-              require(["views/content/home/HomeRecommend.vue"], resolve)
-          }]
+          children: [
+            {
+              path: "recommendContent",
+              name: "recommendContent",
+              meta: {
+                keepAlive: true
+              },
+              component: resolve =>
+                require(["views/content/home/HomeRecommend.vue"], resolve)
+            }
+          ]
         },
         {
           path: "friend",
           name: "friend",
+          meta: {
+            keepAlive: true
+          },
           component: resolve =>
             require(["views/content/home/Index.vue"], resolve),
-          children: [{
-            path: "friendContent",
-            name: "friendContent",
-            component: resolve =>
-              require(["views/content/home/Friend.vue"], resolve)
-          }]
+          children: [
+            {
+              path: "friendContent",
+              name: "friendContent",
+              meta: {
+                keepAlive: true
+              },
+              component: resolve =>
+                require(["views/content/home/Friend.vue"], resolve)
+            }
+          ]
         },
         {
           path: "anchorStation",
           name: "anchorStation",
+          meta: {
+            keepAlive: true
+          },
           component: resolve =>
             require(["views/content/home/Index.vue"], resolve),
-          children: [{
-            path: "anchorStationContent",
-            name: "anchorStationContent",
-            component: resolve =>
-              require(["views/content/home/AnchorStation.vue"], resolve)
-          }]
+          children: [
+            {
+              path: "anchorStationContent",
+              name: "anchorStationContent",
+              meta: {
+                keepAlive: true
+              },
+              component: resolve =>
+                require(["views/content/home/AnchorStation.vue"], resolve)
+            }
+          ]
         }
       ]
     },
     // 视频
     {
       path: "/video",
+      meta: {
+        keepAlive: true
+      },
       component: resolve => require(["views/Index.vue"], resolve),
       redirect: "/video/videoRecommend",
-      children: [{
+      children: [
+        {
           path: "videoRecommend",
           name: "videoRecommend"
         },
         {
           path: "music",
           name: "music",
+          meta: {
+            keepAlive: true
+          },
           component: resolve =>
             require(["views/content/video/Music.vue"], resolve)
         },
         {
           path: "showTime",
           name: "showTime",
+          meta: {
+            keepAlive: true
+          },
           component: resolve =>
             require(["views/content/video/ShowTime.vue"], resolve)
         },
         {
           path: "mv",
           name: "mv",
+          meta: {
+            keepAlive: true
+          },
           component: resolve => require(["views/content/video/Mv.vue"], resolve)
         },
 
         {
           path: "secondElement",
           name: "secondElement",
+          meta: {
+            keepAlive: true
+          },
           component: resolve =>
             require(["views/content/video/SecondElement.vue"], resolve)
         },
         {
           path: "dance",
           name: "dance",
+          meta: {
+            keepAlive: true
+          },
           component: resolve =>
             require(["views/content/video/Dance.vue"], resolve)
         }
@@ -196,34 +247,59 @@ export default new Router({
     {
       path: "/login",
       name: "login",
+      meta: {
+        keepAlive: true
+      },
       component: resolve => require(["views/Login.vue"], resolve)
     },
     {
       path: "/phoneLogin",
       name: "phoneLogin",
+      meta: {
+        keepAlive: true
+      },
       component: resolve => require(["views/PhoneLogin.vue"], resolve)
     },
     {
       path: "/play",
       name: "play",
+      meta: {
+        keepAlive: true
+      },
       component: resolve => require(["views/common/Play.vue"], resolve)
     },
     {
       path: "/dayRecommend",
       name: "dayRecommend",
+      meta: {
+        keepAlive: false
+      },
       component: resolve =>
         require(["views/content/home/DayRecommend.vue"], resolve)
-    }, {
+    },
+    {
       path: "/register",
       name: "register",
-      component: resolve =>
-        require(["views/Register.vue"], resolve)
+      meta: {
+        keepAlive: true
+      },
+      component: resolve => require(["views/Register.vue"], resolve)
     },
     {
       path: "/error",
       name: "error",
-      component: resolve =>
-        require(["views/common/Error.vue"], resolve)
+      meta: {
+        keepAlive: true
+      },
+      component: resolve => require(["views/common/Error.vue"], resolve)
+    },
+    {
+      path: "/currentPlay",
+      name: "currentPlay",
+      meta: {
+        keepAlive: false
+      },
+      component: resolve => require(["views/common/CurrentPlay.vue"], resolve)
     },
     {
       path: "*",

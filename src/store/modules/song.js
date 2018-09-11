@@ -1,4 +1,7 @@
 // import Vue from "vue";
+import { getVideoFun } from "@/api/song";
+import { resolve } from "url";
+import { rejects } from "assert";
 const song = {
   state: {
     toastisShow: false, //toast是否显示
@@ -10,7 +13,8 @@ const song = {
     currentUrl: "", //当前歌曲的url
     currentIndex: 0, //当前歌曲的索引
     songType: 1, //当前的播放类型，循环，随机，单曲
-    isPlay: false //当前是否在播放
+    isPlay: false, //当前是否在播放
+    videoArr: [] //当前可播放的视频
   },
   //获取属性
   //改变属性
@@ -44,9 +48,28 @@ const song = {
     currentSong(state, payload) {
       state.currentSong = [];
       state.currentSong.push(payload);
+    },
+    SET_VIDEO(state, payload) {
+      state.videoArr = [];
+      state.videoArr.push(payload);
     }
   },
   //出发mutations
-  actions: {}
+  actions: {
+    getVideo({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        getVideoFun(id)
+          .then(resp => {
+            const data = resp.data;
+            console.log(data);
+            commit("SET_VIDEO", data);
+            resolve();
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    }
+  }
 };
 export default song;

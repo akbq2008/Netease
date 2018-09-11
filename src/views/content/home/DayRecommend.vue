@@ -65,9 +65,10 @@
             </div>
           </div>
           <div class="songList_right">
-            <svg class="icon" aria-hidden="true">
+            <svg class="icon" aria-hidden="true" v-if="item.mvid!=0" @touchend.stop="playVideo(item.mvid)">
               <use xlink:href="#icon-video-copy"></use>
             </svg>
+            <div v-else></div>
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-gengduo-copy-copy"></use>
             </svg>
@@ -93,6 +94,14 @@ export default {
     };
   },
   methods: {
+    /**
+     * 播放视频
+     */
+    playVideo(id) {
+      this.$store.dispatch("getVideo", id).then(data => {
+        console.log(data);
+      });
+    },
     onScroll() {
       let Bscroll = new Bscroll(this.$refs.songListWrap);
     },
@@ -182,6 +191,7 @@ export default {
     z-index: 10;
     display: flex;
     align-items: center;
+    height: 2.8rem;
     svg {
       flex: 1;
       width: 1.5rem;
@@ -371,12 +381,17 @@ export default {
       }
     }
     .songList_right {
+      display: flex;
       min-width: 15vw;
-      svg {
+      svg,
+      div {
         width: 1.5rem;
         height: 1.5rem;
       }
     }
+  }
+  .songList:active {
+    background: #c7c6c6;
   }
   .songListWrap {
     padding-bottom: 2.75rem;
