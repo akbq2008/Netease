@@ -111,7 +111,15 @@ export default new Router({
       meta: {
         keepAlive: true
       },
-      component: resolve => require(["views/Index.vue"], resolve)
+      redirect: "/local/personal",
+      component: resolve => require(["views/Index.vue"], resolve),
+      children: [
+        {
+          path: "personal",
+          component: resolve =>
+            require(["views/content/local/Local.vue"], resolve)
+        }
+      ]
     },
     // 首页
     {
