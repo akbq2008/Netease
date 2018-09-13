@@ -8,6 +8,7 @@ import "swiper/dist/css/swiper.css";
 import directive from "@/directive/directive.js";
 import filter from "@/filter/filter.js";
 import store from "./store";
+import '@/styles/index.css';
 import './permission'
 Vue.use(VueAwesomeSwiper);
 Vue.config.productionTip = false;

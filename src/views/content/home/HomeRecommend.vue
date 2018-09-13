@@ -72,12 +72,12 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "carrousel",
   data() {
     return {
       swiperSlides: [], //初始化数据
-      songList: [], //推荐歌单
       swiperOption: {
         pagination: {
           el: ".swiper-pagination"
@@ -92,6 +92,7 @@ export default {
       }
     };
   },
+  computed: mapState({ songList: state => state.song.songList }),
   methods: {
     currentSong(item) {
       this.$router.push("/play?id=" + item.id);
@@ -106,28 +107,12 @@ export default {
     },
     //获取歌单
     getSongList() {
-      this.$axios.get("/personalized").then(data => {
-        data = data.data;
-        if (data.code === 200) {
-          this.songList = data.result;
-          this.$store.commit("pustSongList", this.songList);
-        }
-      });
-    },
-    //获取动态消息
-    initEvent() {
-      this.$axios
-        .get("/event", { xhrFields: { withCredentials: true } })
-        .then(data => {
-          data = data.data;
-          // console.log(data);
-        });
+      this.$store.dispatch("getRecommendList");
     }
   },
   mounted() {},
   created() {
     this.init(); //   banner数据初始化
-    this.initEvent(); //获取动态消息
     this.getSongList(); //获取歌单
   }
 };

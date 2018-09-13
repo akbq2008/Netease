@@ -1,0 +1,91 @@
+.bg {
+  background: #f1f2f4 !important;
+}
+
+
+
+.fx {
+  display: flex;
+  align-items: center;
+}
+
+.fx_sa {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.fx_sp {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ct {
+  text-align: center;
+}
+
+.wt {
+  background: white !important;
+}
+
+.jc {
+  display: flex;
+  justify-content: center;
+}
+
+.ac {
+  display: flex;
+  align-items: center;
+}
+
+.ml_1 {
+  margin-left: .5rem;
+}
+
+.mr_1 {
+  margin-right: .5rem;
+}
+
+.m_line {
+  margin-left: .5rem;
+  margin-right: .5rem;
+}
+
+.pl_1 {
+  padding-left: .5rem;
+}
+
+.pr_1 {
+  padding-right: .5rem;
+}
+
+.p_up {
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+.p_line {
+  padding-left: .5rem;
+  padding-right: .5rem;
+}
+
+.svg {
+  vertical-align: middle;
+  width: 2rem;
+  height: 2rem;
+  fill: currentColor;
+}
+
+.line {
+  height: 10px;
+  background-color: #f1f2f4;
+}
+
+.cr_wh {
+  color: #fff !important;
+}
+
+.cr_no {
+  color: #adadad !important;
+}
