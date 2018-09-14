@@ -19,16 +19,20 @@
                     <use xlink:href="#icon-heng--shouye_jiaose_yinlejianshang_"></use>
                 </svg>
             </div>
-            <!-- 唱臂 -->
         </div>
-        <div class="arm">
-            <img src="@/assets/img/play_needle.png" alt="">
+        <!-- 唱臂 -->
+        <img src="@/assets/img/play_needle.png" alt="" class="arm">
+        <!-- 唱盘 -->
+        <div class="player_container ct">
+            <img src="@/assets/img/play_disc.png" alt="">
+            <img src="http://p3.music.126.net/ZBZFHnN3rGqmspoqh_tX8Q==/109951163543840203.jpg" alt="">
         </div>
-        <div class="player_container">
-            <!-- <img src="@/assets/img/play_disc.png" alt=""> -->
-            <!-- <div class="player"> -->
-            <img src="http://p3.music.126.net/ZBZFHnN3rGqmspoqh_tX8Q==/109951163543840203.jpg" alt=""></div>
-        <!-- </div> -->
+        <!-- 底部 -->
+        <div class="footer">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
 </template>
 
@@ -61,22 +65,26 @@ export default {};
     left: 42%;
     top: -24px;
     z-index: 9;
-    img {
-      transform-origin: 33px 43px;
-      transform: rotate(-10deg);
-    }
+    transform-origin: 33px 43px;
+    transform: rotate(-10deg);
   }
   .player_container {
     position: relative;
-    top: -4.5rem;
+    top: -6.5rem;
     img {
       width: 100vw;
-      transform: scale(0.9, 0.9);
+      transform: scale(0.7, 0.7);
     }
-    img {
-      width: 80vw;
+    img:last-of-type {
+      transform: scale(0.5, 0.5);
+      position: absolute;
+      left: 0;
+      top: 0;
       border-radius: 50%;
     }
   }
+}
+
+@media screen and (max-width: 400px) {
 }
 </style>
