@@ -29,9 +29,42 @@
         </div>
         <!-- 底部 -->
         <div class="footer">
-            <div></div>
-            <div></div>
-            <div></div>
+            <div class="fx_sa cr_wh">
+                <svg class="svg" aria-hidden="true">
+                    <use xlink:href="#icon-xihuan1"></use>
+                </svg>
+                <svg class="svg" aria-hidden="true">
+                    <use xlink:href="#icon-xiazai1-copy"></use>
+                </svg>
+                <svg class="svg" aria-hidden="true">
+                    <use xlink:href="#icon-pinglun2-copy"></use>
+                </svg>
+                <svg class="svg" aria-hidden="true">
+                    <use xlink:href="#icon-gengduo-copy-copy-copy"></use>
+                </svg>
+            </div>
+            <div>
+                <span></span>
+                <div></div>
+                <span></span>
+            </div>
+            <div class="fx_sa cr_wh">
+                <svg class="svg" aria-hidden="true">
+                    <use xlink:href="#icon-liebiaoxunhuan-copy"></use>
+                </svg>
+                <svg class="svg" aria-hidden="true">
+                    <use xlink:href="#icon-qianjin-copy"></use>
+                </svg>
+                <svg class="svg" aria-hidden="true">
+                    <use xlink:href="#icon-bofang04"></use>
+                </svg>
+                <svg class="svg" aria-hidden="true">
+                    <use xlink:href="#icon-qianjin-copy-copy"></use>
+                </svg>
+                <svg class="svg" aria-hidden="true">
+                    <use xlink:href="#icon-gengduo"></use>
+                </svg>
+            </div>
         </div>
     </div>
 </template>

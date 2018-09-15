@@ -242,8 +242,8 @@ export default {
       let audio = document.querySelector("audio");
       this.$nextTick(() => {
         setInterval(() => {
-          let left = document.querySelector(".left");
-          let right = document.querySelector(".right");
+          let left = document.querySelector(".circle .left");
+          let right = document.querySelector(".circle .right");
           if (audio.currentTime <= this.halfDuration) {
             this.currentRightDeg = Math.ceil(this.sdeg * audio.currentTime);
             if (right) {
