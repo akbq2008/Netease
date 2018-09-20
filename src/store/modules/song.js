@@ -1,10 +1,6 @@
 // import Vue from "vue";
-import {
-  getVideoFun
-} from "@/api/song";
-import {
-  recommendList
-} from "@/api/local";
+import { getVideoFun } from "@/api/song";
+import { recommendList } from "@/api/local";
 // import { resolve } from "url";
 // import { rejects } from "assert";
 const song = {
@@ -19,7 +15,7 @@ const song = {
     currentIndex: 0, //当前歌曲的索引
     songType: 1, //当前的播放类型，循环，随机，单曲
     isPlay: false, //当前是否在播放
-    videoArr: [], //当前可播放的视频
+    videoArr: [] //当前可播放的视频
   },
   //获取属性
   //改变属性
@@ -61,9 +57,7 @@ const song = {
   },
   //出发mutations
   actions: {
-    getVideo({
-      commit
-    }, id) {
+    getVideo({ commit }, id) {
       return new Promise((resolve, reject) => {
         getVideoFun(id)
           .then(resp => {
@@ -77,18 +71,17 @@ const song = {
           });
       });
     },
-    getRecommendList({
-      commit
-    }) {
+    getRecommendList({ commit }) {
       return new Promise((resolve, reject) => {
-        recommendList().then(resp => {
-          const data = resp.data.result;
-          console.log(data);
-          commit("pustSongList", data);
-          resolve();
-        }).catch(err => {
-          reject(err);
-        })
+        recommendList()
+          .then(resp => {
+            const data = resp.data.result;
+            commit("pustSongList", data);
+            resolve();
+          })
+          .catch(err => {
+            reject(err);
+          });
       });
     }
   }

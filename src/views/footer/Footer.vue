@@ -1,5 +1,5 @@
 <template>
-  <div class="footer_container">
+  <div class="footer_container" ref="footer_container">
     <!-- 播放状态栏 -->
     <div class="footer" v-for="(item,index) in currentPlay" :key="index" @touchstart.stop="playDetail(item)">
       <div class="footer_left">
@@ -137,6 +137,7 @@ export default {
     playDetail(item) {
       // console.log()
       this.$router.push({ name: "currentPlay", params: { song: item } });
+      this.$refs.footer_container.style.display = "none";
     },
     playCurrent(item, index) {
       this.$store.commit("putCurrentSong", item);

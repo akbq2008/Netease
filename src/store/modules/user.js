@@ -60,12 +60,15 @@ const user = {
       });
     },
     LogOut({ commit }) {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
+        // const data=
         commit("SET_TOKEN", "");
         commit("SET_ID", "");
         localStorage.removeItem("userId");
         removeToken();
         resolve();
+      }).catch(err => {
+        reject(err);
       });
     }
   }
