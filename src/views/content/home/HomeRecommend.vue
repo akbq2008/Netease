@@ -11,7 +11,7 @@
     </swiper>
     <div class="recommend_button">
       <ul>
-        <li>
+        <li @touchstart="$router.push('/fm')">
           <a href="#" class="origin_bg">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-local_fm"></use>

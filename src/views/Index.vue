@@ -2,7 +2,6 @@
   <div>
     <app-header></app-header>
     <router-view></router-view>
-    <!-- v-if="$route.path!=='/login'&&$route.path!=='/phoneLogin'&&$route.path!=='/register'&&$route.path!=='currentPlay'" -->
   </div>
 </template>
 

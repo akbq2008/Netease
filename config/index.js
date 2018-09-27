@@ -12,7 +12,7 @@ module.exports = {
     proxyTable: {
       "/api": {
         // target: "http://192.168.11.55:3000",
-        // target: "http://www.suanliutudousi.com:3000/",
+        // target: "http://192.168.42.57:3000",
         target: "http://192.168.1.4:3000",
         // secure: false,  // 如果是https接口，需要配置这个参数
         changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
@@ -23,6 +23,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
+    // host: "192.168.42.57",
     host: "192.168.1.4",
     // host: "0.0.0.0",
     // host: "192.168.11.55", // can be overwritten by process.env.HOST

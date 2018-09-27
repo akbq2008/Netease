@@ -99,7 +99,8 @@ Vue.use(Router);
 export default new Router({
   mode: "history",
   linkActiveClass: "active",
-  routes: [{
+  routes: [
+    {
       path: "/",
       // redirect: "/home/recommend/recommendContent"
       redirect: "/local/personal"
@@ -113,11 +114,13 @@ export default new Router({
       },
       redirect: "/local/personal",
       component: resolve => require(["views/Index.vue"], resolve),
-      children: [{
-        path: "personal",
-        component: resolve =>
-          require(["views/content/local/Local.vue"], resolve)
-      }]
+      children: [
+        {
+          path: "personal",
+          component: resolve =>
+            require(["views/content/local/Local.vue"], resolve)
+        }
+      ]
     },
     // 首页
     {
@@ -127,7 +130,8 @@ export default new Router({
       },
       component: resolve => require(["views/Index.vue"], resolve),
       redirect: "/home/recommend/recommendContent",
-      children: [{
+      children: [
+        {
           path: "recommend",
           name: "recommend",
           meta: {
@@ -135,15 +139,17 @@ export default new Router({
           },
           component: resolve =>
             require(["views/content/home/Index.vue"], resolve),
-          children: [{
-            path: "recommendContent",
-            name: "recommendContent",
-            meta: {
-              keepAlive: true
-            },
-            component: resolve =>
-              require(["views/content/home/HomeRecommend.vue"], resolve)
-          }]
+          children: [
+            {
+              path: "recommendContent",
+              name: "recommendContent",
+              meta: {
+                keepAlive: true
+              },
+              component: resolve =>
+                require(["views/content/home/HomeRecommend.vue"], resolve)
+            }
+          ]
         },
         {
           path: "friend",
@@ -153,15 +159,17 @@ export default new Router({
           },
           component: resolve =>
             require(["views/content/home/Index.vue"], resolve),
-          children: [{
-            path: "friendContent",
-            name: "friendContent",
-            meta: {
-              keepAlive: true
-            },
-            component: resolve =>
-              require(["views/content/home/Friend.vue"], resolve)
-          }]
+          children: [
+            {
+              path: "friendContent",
+              name: "friendContent",
+              meta: {
+                keepAlive: true
+              },
+              component: resolve =>
+                require(["views/content/home/Friend.vue"], resolve)
+            }
+          ]
         },
         {
           path: "anchorStation",
@@ -171,15 +179,17 @@ export default new Router({
           },
           component: resolve =>
             require(["views/content/home/Index.vue"], resolve),
-          children: [{
-            path: "anchorStationContent",
-            name: "anchorStationContent",
-            meta: {
-              keepAlive: true
-            },
-            component: resolve =>
-              require(["views/content/home/AnchorStation.vue"], resolve)
-          }]
+          children: [
+            {
+              path: "anchorStationContent",
+              name: "anchorStationContent",
+              meta: {
+                keepAlive: true
+              },
+              component: resolve =>
+                require(["views/content/home/AnchorStation.vue"], resolve)
+            }
+          ]
         }
       ]
     },
@@ -191,7 +201,8 @@ export default new Router({
       },
       component: resolve => require(["views/Index.vue"], resolve),
       redirect: "/video/videoRecommend",
-      children: [{
+      children: [
+        {
           path: "videoRecommend",
           name: "videoRecommend"
         },
@@ -298,6 +309,14 @@ export default new Router({
         keepAlive: false
       },
       component: resolve => require(["views/common/CurrentPlay.vue"], resolve)
+    },
+    {
+      path: "/fm",
+      name: "fm",
+      meta: {
+        keepAlive: true
+      },
+      component: resolve => require(["views/content/home/Fm.vue"], resolve)
     },
     {
       path: "*",

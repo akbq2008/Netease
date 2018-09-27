@@ -37,9 +37,9 @@ $axios.interceptors.response.use(
    */
   response => {
     const res = response.data;
-    if (res && res.code == "-460") {
+    if (res && res.code == -460) {
       store.dispatch("LogOut");
-      router.push("/login");
+      next("/login");
     } else {
       return response;
     }

@@ -23,4 +23,17 @@ Vue.filter("timeTo", function(value, s) {
   }
   return time;
 });
+
+Vue.filter("timeFormatter", (value, s) => {
+  if (!value) {
+    return "00:00";
+  }
+  if (!s) {
+    let minute = Math.floor(value / 60);
+    minute < 10 ? (minute = "0" + minute) : minute;
+    let seconds = Math.floor(value % 60);
+    seconds < 10 ? (seconds = "0" + seconds) : seconds;
+    return minute + ":" + seconds;
+  }
+});
 export const filter = filter;

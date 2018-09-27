@@ -2,11 +2,9 @@
   <div id="app">
     <keep-alive v-if="$route.meta.keepAlive">
       <router-view/>
-      <!-- <app-footer v-if="$route.path!=='/login'&&$route.path!=='/phoneLogin'&&$route.path!=='/register'&&$route.path!=='currentPlay'"></app-footer> -->
     </keep-alive>
     <router-view v-else/>
     <app-footer></app-footer>
-    <!-- <app-footer v-if="$route.path!=='/login'&&$route.path!=='/phoneLogin'&&$route.path!=='/register'&&$route.path!=='currentPlay'"></app-footer> -->
     <app-message></app-message>
   </div>
 </template>

@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="footer_right">
-        <div v-if="!isPlayIcon" @touchstart.stop="playMusic" class="playMusic comm ">
+        <div v-if="!isPlay" @touchstart.stop="playMusic" class="playMusic comm ">
           <div class="circle" style="background:red">
             <svg class="play_icon" aria-hidden="true">
               <use xlink:href="#icon-bofang1"></use>
@@ -120,7 +120,7 @@ export default {
       currentSong: [],
       songType: 1, //默认为循环
       currentSongUrl: "",
-      isPlayIcon: false,
+      // isPlayIcon: false,
       duration: 0, //当前播放的总时长
       sdeg: 0, //每秒需要旋转的度数
       halfDuration: 0, //总时长的一半
@@ -172,10 +172,11 @@ export default {
     play() {
       this.currentSongUrl = this.currentUrl;
       let audio = document.querySelector("audio");
-      this.isPlayIcon = true;
+      // this.isPlayIcon = true;
       audio.load(); //要加载资源
       //切换资源时，还没加载完就直接赋值duration会返回NaN,通过检测是否可以播放来完成。
       let _this = this;
+      this.$store.commit("changePlay", true);
       audio.oncanplay = () => {
         this.duration = audio.duration;
         // audio.duration = 5;
@@ -217,16 +218,17 @@ export default {
     pauseMusic() {
       let audio = document.querySelector("audio");
       audio.pause();
-      this.isPlayIcon = false;
+      // this.isPlayIcon = false;
+      this.$store.commit("changePlay", false);
       this.rotateDeg();
     },
     // 重新播放歌曲
     playMusic() {
       let audio = document.querySelector("audio");
-      // let audio = this.$refs.audio;
       audio.play();
-      this.isPlayIcon = true;
+      // this.isPlayIcon = true;
       this.rotateDeg();
+      this.$store.commit("changePlay", true);
     },
     // 获取播放列表
     getSongList() {

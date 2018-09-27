@@ -1,99 +1,166 @@
 <template>
-    <div class="currentPlay">
-        <div class="header_container  p_up">
-            <div class="fx_sp">
-                <div class="left  p_line">
-                    <svg class="svg mr_1" aria-hidden="true" @touchstart.stop.prevent="turnBack">
-                        <use xlink:href="#icon-fanhui"></use>
-                    </svg>
-                    <div v-for="(item,index) in currentPlay" :key="index">
-                        <p class="cr_wh">{{item.name}}</p>
-                        <p class="cr_no" v-for="(art,index) in item.artists" :key="index">{{art.name}}
-                            <svg class="svg mr_1" aria-hidden="true">
-                                <use xlink:href="#icon-forward"></use>
-                            </svg>
-                        </p>
-                    </div>
-                </div>
-                <div class="right">
-                    <svg class="svg" aria-hidden="true">
-                        <use xlink:href="#icon-heng--shouye_jiaose_yinlejianshang_"></use>
-                    </svg>
-                </div>
-            </div>
-            <!-- <div class="shadow"> </div> -->
+  <div class="currentPlay">
+    <div class="header_container  p_up">
+      <div class="fx_sp">
+        <div class="left  p_line">
+          <svg class="svg mr_1" aria-hidden="true" @touchstart.stop.prevent="turnBack">
+            <use xlink:href="#icon-fanhui"></use>
+          </svg>
+          <div v-for="(item,index) in currentPlay" :key="index">
+            <p class="cr_wh">{{item.name}}</p>
+            <p class="cr_no" v-for="(art,index) in item.artists" :key="index">{{art.name}}
+              <svg class="svg mr_1" aria-hidden="true">
+                <use xlink:href="#icon-forward"></use>
+              </svg>
+            </p>
+          </div>
         </div>
-        <!-- 唱臂 -->
-        <img src="@/assets/img/play_needle.png" alt="" class="arm">
-        <!-- 唱盘 -->
-        <div class="player_container ct">
-            <img src="@/assets/img/play_disc.png" alt="">
-            <img v-if="currentPlay[0].album" :src="currentPlay[0].album.picUrl" alt="">
+        <div class="right">
+          <svg class="svg" aria-hidden="true">
+            <use xlink:href="#icon-heng--shouye_jiaose_yinlejianshang_"></use>
+          </svg>
         </div>
-        <!-- 底部 -->
-        <div class="footer">
-            <div class="header">
-                <div class="fx_sa cr_wh">
-                    <svg class="svg" aria-hidden="true">
-                        <use xlink:href="#icon-xihuan1"></use>
-                    </svg>
-                    <svg class="svg" aria-hidden="true">
-                        <use xlink:href="#icon-xiazai1-copy"></use>
-                    </svg>
-                    <svg class="svg" aria-hidden="true">
-                        <use xlink:href="#icon-pinglun2-copy"></use>
-                    </svg>
-                    <svg class="svg" aria-hidden="true">
-                        <use xlink:href="#icon-gengduo-copy-copy-copy"></use>
-                    </svg>
-                </div>
-            </div>
-            <div class="fx_sa progress_container">
-                <span class='mr_1'>1:55</span>
-                <div class="progress">
-                    <div class="currentTime"></div>
-                    <div class="btn fx">
-                        <div class="inner"></div>
-                    </div>
-                </div>
-                <span class='ml_1'>3:00</span>
-            </div>
-            <div class="fx_sa cr_wh">
-                <div class="footer fx_sa">
-                    <svg class="svg" aria-hidden="true">
-                        <use xlink:href="#icon-liebiaoxunhuan-copy"></use>
-                    </svg>
-                    <svg class="svg" aria-hidden="true">
-                        <use xlink:href="#icon-qianjin-copy"></use>
-                    </svg>
-                    <svg class="svg" aria-hidden="true">
-                        <use xlink:href="#icon-bofang04"></use>
-                    </svg>
-                    <svg class="svg" aria-hidden="true">
-                        <use xlink:href="#icon-qianjin-copy-copy"></use>
-                    </svg>
-                    <svg class="svg" aria-hidden="true">
-                        <use xlink:href="#icon-gengduo"></use>
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <div class="filterBg" :style="{background:'url('+currentPlay[0].album.picUrl+')'}"></div>
+      </div>
+      <!-- <div class="shadow"> </div> -->
     </div>
+    <!-- 唱臂 -->
+    <img src="@/assets/img/play_needle.png" alt="" class="arm">
+    <!-- 唱盘 -->
+    <div class="player_container ct">
+      <img src="@/assets/img/play_disc.png" alt="">
+      <img v-if="currentPlay[0].album" :src="currentPlay[0].album.picUrl" alt="">
+    </div>
+    <!-- 底部 -->
+    <div class="footer">
+      <div class="header">
+        <div class="fx_sa cr_wh">
+          <svg class="svg" aria-hidden="true">
+            <use xlink:href="#icon-xihuan1"></use>
+          </svg>
+          <svg class="svg" aria-hidden="true">
+            <use xlink:href="#icon-xiazai1-copy"></use>
+          </svg>
+          <svg class="svg" aria-hidden="true">
+            <use xlink:href="#icon-pinglun2-copy"></use>
+          </svg>
+          <svg class="svg" aria-hidden="true">
+            <use xlink:href="#icon-gengduo-copy-copy-copy"></use>
+          </svg>
+        </div>
+      </div>
+      <div class="fx_sa progress_container">
+        <span class='mr_1'>{{time|timeFormatter}}</span>
+        <div class="progress" @touchstart="clickPlay" @touchmove="clickPlay">
+          <div class="currentTime" :style="{width:currentTime+'vw'}"></div>
+          <div class="btn fx playButton" ref="playButton">
+            <div class="inner"></div>
+          </div>
+        </div>
+        <span class='ml_1'>{{totalTime|timeFormatter}}</span>
+      </div>
+      <div class="fx_sa cr_wh">
+        <div class="footer fx_sa">
+          <svg class="svg" aria-hidden="true">
+            <use xlink:href="#icon-liebiaoxunhuan-copy"></use>
+          </svg>
+          <svg class="svg" aria-hidden="true">
+            <use xlink:href="#icon-qianjin-copy"></use>
+          </svg>
+          <svg class="svg" aria-hidden="true" @touchstart.stop="playMusic" v-if="!isPlay">
+            <use xlink:href="#icon-bofang04"></use>
+          </svg>
+          <svg class="svg" aria-hidden="true" @touchstart.stop="pauseMusic" v-else>
+            <use xlink:href="#icon-zanting1"></use>
+          </svg>
+          <svg class="svg" aria-hidden="true">
+            <use xlink:href="#icon-qianjin-copy-copy"></use>
+          </svg>
+          <svg class="svg" aria-hidden="true">
+            <use xlink:href="#icon-gengduo"></use>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="filterBg" :style="{background:'url('+currentPlay[0].album.picUrl+')'}"></div>
+  </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 export default {
-  computed: mapState({
-    currentPlay: state => state.song.currentPlay
-  }),
+  data() {
+    return {
+      time: 0,
+      currentTime: 0,
+      totalTime: 0
+    };
+  },
+  computed: {
+    ...mapState({
+      currentPlay: state => state.song.currentPlay,
+      isPlay: state => state.song.isPlay
+    })
+  },
   methods: {
+    /**
+     * 暂停歌曲
+     */
+    pauseMusic() {
+      let audio = document.querySelector("audio");
+      audio.pause();
+      this.$store.commit("changePlay", false);
+    },
+    /**
+     * 播放歌曲
+     */
+    playMusic() {
+      let audio = document.querySelector("audio");
+      audio.play();
+      this.$store.commit("changePlay", true);
+    },
+    /**
+     * 返回上一层
+     */
     turnBack() {
       this.$router.go(-1);
       let footer_container = document.querySelector(".footer_container");
       footer_container.style.display = "block";
+    },
+    /**
+     * 点击播放,滑动播放
+     */
+    clickPlay(e) {
+      let currentTime = document.querySelector(".progress");
+      let audio = document.querySelector("audio");
+      let playButton = document.querySelector(".playButton");
+      let cX =
+        (parseInt(e.touches[0].clientX) - parseInt(currentTime.offsetLeft)) /
+        (0.75 * parseInt(window.innerWidth)); //当前的进度转换百分比，（当前点击位置-进度层距离左边视口的距离）/(0.8*视口的宽度)
+      audio.currentTime = cX * audio.duration; //当前播放时间
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      let audio = document.querySelector("audio");
+      let playButton = document.querySelector(".playButton");
+      let progress = document.querySelector(".progress");
+      this.totalTime = audio.duration;
+      setInterval(() => {
+        // 进度层变化
+        if (audio.oncanplay) {
+          this.time = audio.currentTime; //当前时间
+          this.currentTime = audio.currentTime / audio.duration * 75; //进度条红色层
+          playButton.style.left =
+            progress.offsetWidth * audio.currentTime / audio.duration -
+            8 +
+            "px"; //进度条按钮层
+        }
+        // 结束的时候重新赋值
+        if (audio.onended) {
+          this.totalTime = audio.duration;
+        }
+      }, 1000);
+    });
   }
 };
 </script>
@@ -186,12 +253,11 @@ export default {
     justify-content: center;
     .progress {
       position: relative;
-      width: 80vw;
+      width: 75vw;
       height: 5px;
       background: #ddd;
     }
     .currentTime {
-      width: 10vw;
       height: 5px;
       background: red;
     }
