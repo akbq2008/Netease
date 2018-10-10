@@ -155,12 +155,8 @@ export default {
     },
     // 获取歌曲
     getSongList() {
-      let _this = this;
-      this.$axios.post("/recommend/songs").then(data => {
-        data = data.data;
-        if (data.code === 200) {
-          _this.song = data.recommend;
-        }
+      this.$store.dispatch("getDayRecommendList").then(data => {
+        this.song = data;
       });
     }
   },
@@ -170,7 +166,6 @@ export default {
   mounted() {
     this.songPlay();
   },
-  // this.
   computed: mapState({
     songType: state => state.song.songType,
     currentIndex: state => state.song.currentIndex
@@ -217,8 +212,7 @@ export default {
       align-items: center;
       justify-content: space-between;
       background: grey;
-      padding: 3.81rem 0.63rem 0.65rem 0.63rem;
-      border: 1px solid grey;
+      padding: 2.8rem 0.63rem 0 0.63rem;
       .img_wrap {
         position: relative;
         width: 12.5rem;

@@ -199,8 +199,8 @@ export default {
       border: 1px solid grey;
       .img_wrap {
         position: relative;
-        width: 12.5rem;
-        height: 12.5rem;
+        width: 8.5rem;
+        height: 8.5rem;
         img {
           display: inline-block;
           width: 100%;

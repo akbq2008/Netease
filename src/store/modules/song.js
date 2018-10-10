@@ -1,6 +1,6 @@
 // import Vue from "vue";
-import { getVideoFun } from "@/api/song";
-import { recommendList } from "@/api/local";
+import { getVideoFun, recommendList, getDayRecommendList } from "@/api/song";
+// import { recommendList } from "@/api/local";
 // import { resolve } from "url";
 // import { rejects } from "assert";
 const song = {
@@ -15,7 +15,8 @@ const song = {
     currentIndex: 0, //当前歌曲的索引
     songType: 1, //当前的播放类型，循环，随机，单曲
     isPlay: false, //当前是否在播放
-    videoArr: [] //当前可播放的视频
+    videoArr: [], //当前可播放的视频
+    DayRecommendList: [] //每日推荐歌单列表
   },
   //获取属性
   //改变属性
@@ -53,10 +54,19 @@ const song = {
     SET_VIDEO(state, payload) {
       state.videoArr = [];
       state.videoArr.push(payload);
+    },
+    setDayRecommendList(state, payload) {
+      state.DayRecommendList = [];
+      state.DayRecommendList = payload;
     }
   },
   //出发mutations
   actions: {
+    /**
+     * 获取视频
+     * @param {} param0
+     * @param {*} id
+     */
     getVideo({ commit }, id) {
       return new Promise((resolve, reject) => {
         getVideoFun(id)
@@ -71,6 +81,10 @@ const song = {
           });
       });
     },
+    /**
+     * 获取推荐歌单
+     * @param  param0
+     */
     getRecommendList({ commit }) {
       return new Promise((resolve, reject) => {
         recommendList()
@@ -78,6 +92,24 @@ const song = {
             const data = resp.data.result;
             commit("pustSongList", data);
             resolve();
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
+    /**
+     *
+     * @param {获取每日推荐}} param0
+     */
+    getDayRecommendList({ commit }) {
+      return new Promise((resolve, reject) => {
+        getDayRecommendList()
+          .then(resp => {
+            const data = resp.data.recommend;
+            console.log(data);
+            commit("setDayRecommendList", data);
+            resolve(data);
           })
           .catch(err => {
             reject(err);
